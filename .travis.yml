@@ -1,27 +1,35 @@
 language: c
+# Set the app name(s) for later in this script. Separated by spaces. i.e.:
+# export CFS_APP_NAMES=vc0706
+# or
+# export CFS_APP_NAMES="vc0706 tim_app ads1115"
 before_install:
+ - export CFS_APP_NAMES=vc0706
+# Install dependencies for this app here
+install:
  - sudo apt-get -qq update
  - sudo apt-get install -y gcc-multilib g++-multilib
-before_script:
  - git clone git://git.drogon.net/wiringPi
  - cd wiringPi
  - ./build
  - cd ..
+# Don't touch anything below this. Ever. You will regret it. -Ezra
+before_script:
  - git clone https://github.com/CACTUS-Mission/cFE.git
- - mkdir cFE/apps/vc0706 cFE/apps/vc0706/fsw
+ - mkdir cFE/apps/$CFS_APP_NAMES cFE/apps/$CFS_APP_NAMES/fsw
  - rm -rf cFE/osal/
  - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
  - tar -xf osal-4.2.1a-release.tar.gz
  - mv osal-4.2.1a-release cFE/osal
 script:
- - mv for_build cFE/apps/vc0706/fsw
- - mv mission_inc cFE/apps/vc0706/fsw
- - mv platform_inc cFE/apps/vc0706/fsw
- - mv src cFE/apps/vc0706/fsw
+ - mv for_build cFE/apps/$CFS_APP_NAMES/fsw
+ - mv mission_inc cFE/apps/$CFS_APP_NAMES/fsw
+ - mv platform_inc cFE/apps/$CFS_APP_NAMES/fsw
+ - mv src cFE/apps/$CFS_APP_NAMES/fsw
  - cd cFE
  - source setvars.sh
  - cd $CFS_MISSION/build/cpu1
- - export THE_APPS=vc0706
+ - export THE_APPS=$CFS_APP_NAMES
  - make clean
  - make config
  - make

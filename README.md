@@ -1,2 +1,2 @@
-# VC0706 cFS Module ![build status](https://travis-ci.org/CACTUS-Mission/cFS-VC0706.svg?branch=master)
+# VC0706 cFS Module [![build status](https://travis-ci.org/CACTUS-Mission/cFS-VC0706.svg?branch=master)](https://travis-ci.org/CACTUS-Mission/cFS-VC0706)
 This cFS app communicates with the VC0706 camera and periodically saves pictures, to be transmitted to ground by the TIM.

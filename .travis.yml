@@ -1,10 +1,7 @@
 language: c
-# Set the app name(s) for later in this script. Separated by spaces. i.e.:
-# export CFS_APP_NAMES=vc0706
-# or
-# export CFS_APP_NAMES="vc0706 tim_app ads1115"
+# Set the app name for later in this script
 before_install:
- - export CFS_APP_NAMES=vc0706
+ - export CFS_APP_NAME=vc0706
 # Install dependencies for this app here
 install:
  - sudo apt-get -qq update
@@ -16,20 +13,20 @@ install:
 # Don't touch anything below this. Ever. You will regret it. -Ezra
 before_script:
  - git clone https://github.com/CACTUS-Mission/cFE.git
- - mkdir cFE/apps/$CFS_APP_NAMES cFE/apps/$CFS_APP_NAMES/fsw
+ - mkdir cFE/apps/$CFS_APP_NAME cFE/apps/$CFS_APP_NAME/fsw
  - rm -rf cFE/osal/
  - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
  - tar -xf osal-4.2.1a-release.tar.gz
  - mv osal-4.2.1a-release cFE/osal
 script:
- - mv for_build cFE/apps/$CFS_APP_NAMES/fsw
- - mv mission_inc cFE/apps/$CFS_APP_NAMES/fsw
- - mv platform_inc cFE/apps/$CFS_APP_NAMES/fsw
- - mv src cFE/apps/$CFS_APP_NAMES/fsw
+ - mv for_build cFE/apps/$CFS_APP_NAME/fsw
+ - mv mission_inc cFE/apps/$CFS_APP_NAME/fsw
+ - mv platform_inc cFE/apps/$CFS_APP_NAME/fsw
+ - mv src cFE/apps/$CFS_APP_NAME/fsw
  - cd cFE
  - source setvars.sh
  - cd $CFS_MISSION/build/cpu1
- - export THE_APPS=$CFS_APP_NAMES
+ - export THE_APPS=$CFS_APP_NAME
  - make clean
  - make config
  - make

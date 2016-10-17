@@ -1,0 +1,27 @@
+language: c
+before_install:
+ - sudo apt-get -qq update
+ - sudo apt-get install -y gcc-multilib g++-multilib
+before_script:
+ - git clone git://git.drogon.net/wiringPi
+ - cd wiringPi
+ - ./build
+ - cd ..
+ - git clone https://github.com/CACTUS-Mission/cFE.git
+ - mkdir cFE/apps/vc0706 cFE/apps/vc0706/fsw
+ - rm -rf cFE/osal/
+ - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
+ - tar -xf osal-4.2.1a-release.tar.gz
+ - mv osal-4.2.1a-release cFE/osal
+script:
+ - mv for_build cFE/apps/vc0706/fsw
+ - mv mission_inc cFE/apps/vc0706/fsw
+ - mv platform_inc cFE/apps/vc0706/fsw
+ - mv src cFE/apps/vc0706/fsw
+ - cd cFE
+ - source setvars.sh
+ - cd $CFS_MISSION/build/cpu1
+ - export THE_APPS=vc0706
+ - make clean
+ - make config
+ - make

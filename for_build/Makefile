@@ -95,7 +95,8 @@ INCLUDE_PATH = \
 -I$(CFS_APP_SRC)/$(APPTARGET)/fsw/src \
 -I$(CFS_MISSION_INC) \
 -I../cfe/inc \
--I../inc
+-I../inc \
+-I/usr/local/include
 
 ##
 ## Define the VPATH make variable. 

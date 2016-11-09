@@ -33,7 +33,7 @@ SOURCES = $(OBJS:.o=.c)
 ##
 ## Specify extra C Flags needed to build this subsystem
 ##
-LOCAL_COPTS =
+LOCAL_COPTS = -lwiringpi
 
 
 ##
@@ -49,7 +49,7 @@ EXEDIR=../exe
 ## entry like the following:
 ##  -R../tst_lib/tst_lib.elf
 ##
-SHARED_LIB_LINK = #-lwiringPi 
+SHARED_LIB_LINK =
 
 ########################################################################
 # Should not have to change below this line, except for customized 
@@ -95,7 +95,8 @@ INCLUDE_PATH = \
 -I$(CFS_APP_SRC)/$(APPTARGET)/fsw/src \
 -I$(CFS_MISSION_INC) \
 -I../cfe/inc \
--I../inc
+-I../inc \
+-I/usr/local/include
 
 ##
 ## Define the VPATH make variable. 

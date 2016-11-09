@@ -4,10 +4,11 @@ before_install:
  - export CFS_APP_NAME=vc0706
 # Install dependencies for this app here
 install:
+ - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
  - sudo apt-get -qq update
- - sudo apt-get install -y gcc-multilib g++-multilib
- - git clone git://git.drogon.net/wiringPi
- - cd wiringPi
+ - sudo apt-get install -y gcc-multilib g++-multilib gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+ - git clone https://github.com/CACTUS-Mission/WiringPi.git
+ - cd WiringPi
  - ./build
  - cd ..
 # Don't touch anything below this. Ever. You will regret it. -Ezra

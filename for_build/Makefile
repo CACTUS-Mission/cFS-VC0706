@@ -33,7 +33,7 @@ SOURCES = $(OBJS:.o=.c)
 ##
 ## Specify extra C Flags needed to build this subsystem
 ##
-LOCAL_COPTS =
+LOCAL_COPTS = -lwiringpi
 
 
 ##
@@ -49,7 +49,7 @@ EXEDIR=../exe
 ## entry like the following:
 ##  -R../tst_lib/tst_lib.elf
 ##
-SHARED_LIB_LINK = -lwiringPi 
+SHARED_LIB_LINK =
 
 ########################################################################
 # Should not have to change below this line, except for customized 

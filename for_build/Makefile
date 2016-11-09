@@ -49,7 +49,7 @@ EXEDIR=../exe
 ## entry like the following:
 ##  -R../tst_lib/tst_lib.elf
 ##
-SHARED_LIB_LINK = #-lwiringPi 
+SHARED_LIB_LINK = -lwiringPi 
 
 ########################################################################
 # Should not have to change below this line, except for customized 

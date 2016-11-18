@@ -30,7 +30,7 @@ void updatePhotoCount(uint8 pic_count);
 ** External References
 */
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
-extern struct led_t led;
+extern struct led_t led; /**< LED instance from vc0706.c */
 extern struct Camera_t cam;
 
 extern char num_reboots[3];

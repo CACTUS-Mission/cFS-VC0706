@@ -30,6 +30,7 @@
 // Brian's Defines
 #define BAUD 38400
 
+#define COMMAND_BEGIN 0x56
 #define RESET 0x26
 #define GEN_VERSION 0x11
 #define READ_FBUF 0x32
@@ -71,7 +72,7 @@
 
 typedef struct Camera_t {
     int motion;
-    int ready;
+    boolean ready;
     int ttyInterface;
     int fd;
 

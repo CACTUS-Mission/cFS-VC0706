@@ -66,9 +66,9 @@ int VC0706_takePics(void)
     led_init(&led, (int)LED_PIN);
 
     /*
-    ** Attempt to initalize Camera
+    ** Attempt to initalize Camera #1
     */
-    if(init(&cam) == -1) // Error
+    if(init(&cam, 0) == -1) // Error
     {
         OS_printf("Camera initialization error.\n");
         return -1;
@@ -111,7 +111,7 @@ int VC0706_takePics(void)
 		//OS_printf("VC0706: Calling sprintf()...\n");
         
         int ret = 0;
-        ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, cam->ttyInterface, num_pics_stored); // cFS /exe relative path
+        ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, cam.ttyInterface, num_pics_stored); // cFS /exe relative path
         if(ret < 0)
         {
             OS_printf("sprintf err: %s\n", strerror(ret));

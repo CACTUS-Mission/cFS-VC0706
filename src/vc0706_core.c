@@ -15,9 +15,10 @@ extern struct led_t led;
  * @param ttyInterface - The serial (TX/RX) interface the camera is plugged into. In the case of the CACTUS-1 Pi-Sat boards, 0 and 1 are valid.
  */
 int init(Camera_t *cam, uint8 ttyInterface) {
-    char* fdPath;
+    // Initialize fdPath to the length of "/dev/ttyAMA0" (plus string terminator obviously)
+    char fdPath[13];
     // Create the file path for the TTY interface from a format string and the ttyInterface parameter
-    asprintf(&fdPath, "/dev/ttyAMA%d", ttyInterface);
+    snprintf(fdPath, 13, "/dev/ttyAMA%d", ttyInterface);
     cam->ttyInterface = ttyInterface;
     cam->frameptr = 0;
     cam->bufferLen = 0;

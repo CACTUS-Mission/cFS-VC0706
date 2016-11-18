@@ -33,7 +33,7 @@ SOURCES = $(OBJS:.o=.c)
 ##
 ## Specify extra C Flags needed to build this subsystem
 ##
-LOCAL_COPTS = -lwiringpi
+LOCAL_COPTS = 
 
 
 ##
@@ -95,8 +95,7 @@ INCLUDE_PATH = \
 -I$(CFS_APP_SRC)/$(APPTARGET)/fsw/src \
 -I$(CFS_MISSION_INC) \
 -I../cfe/inc \
--I../inc \
--I/usr/local/include
+-I../inc
 
 ##
 ## Define the VPATH make variable. 

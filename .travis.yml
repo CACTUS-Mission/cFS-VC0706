@@ -1,24 +1,27 @@
 language: c
+# Install apt dependencies
+addons:
+    apt:
+        packages:
+            - gcc-multilib
+            - gcc-arm-linux-gnueabihf
+            - g++-arm-linux-gnueabihf
 # Set the app name for later in this script
 before_install:
  - export CFS_APP_NAME=vc0706
-# Install dependencies for this app here
+# Don't edit this section (install). It should be the same for all cFS apps. -Ezra
 install:
- - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
- - sudo apt-get -qq update
- - sudo apt-get install -y gcc-multilib g++-multilib gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
- - git clone https://github.com/CACTUS-Mission/WiringPi.git
- - cd WiringPi
- - ./build
- - cd ..
-# Don't touch anything below this. Ever. You will regret it. -Ezra
-before_script:
  - git clone https://github.com/CACTUS-Mission/cFE.git
  - mkdir cFE/apps/$CFS_APP_NAME cFE/apps/$CFS_APP_NAME/fsw
  - rm -rf cFE/osal/
  - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
  - tar -xf osal-4.2.1a-release.tar.gz
  - mv osal-4.2.1a-release cFE/osal
+# Pull WiringPi and move it into the cFE library includes folder
+before_script:
+ - git clone https://github.com/CACTUS-Mission/WiringPi.git
+ - mv WiringPi/wiringPi/* cFE/apps/inc
+# Don't edit this section (script). It should be the same for all cFS apps. -Ezra
 script:
  - mv for_build cFE/apps/$CFS_APP_NAME/fsw
  - mv mission_inc cFE/apps/$CFS_APP_NAME/fsw

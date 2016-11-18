@@ -4,7 +4,6 @@ addons:
     apt:
         packages:
             - gcc-multilib
-            - g++-multlib
             - gcc-arm-linux-gnueabihf
             - g++-arm-linux-gnueabihf
 # Set the app name for later in this script

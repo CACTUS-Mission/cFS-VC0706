@@ -17,9 +17,11 @@ install:
  - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
  - tar -xf osal-4.2.1a-release.tar.gz
  - mv osal-4.2.1a-release cFE/osal
+# Pull WiringPi and move it into the cFE library includes folder
 before_script:
  - git clone https://github.com/CACTUS-Mission/WiringPi.git
  - mv WiringPi/wiringPi/* cFE/apps/inc
+# Don't edit this section (script). It should be the same for all cFS apps. -Ezra
 script:
  - mv for_build cFE/apps/$CFS_APP_NAME/fsw
  - mv mission_inc cFE/apps/$CFS_APP_NAME/fsw

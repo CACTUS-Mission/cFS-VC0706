@@ -85,7 +85,7 @@ typedef struct Camera_t {
 } Camera_t;
 
 
-int init(Camera_t *cam);
+int init(Camera_t *cam, uint8 ttyInterface);
 bool checkReply(Camera_t *cam, int cmd, int size);
 void clearBuffer(Camera_t *cam);
 void reset(Camera_t *cam);

@@ -9,20 +9,17 @@ addons:
 # Set the app name for later in this script
 before_install:
  - export CFS_APP_NAME=vc0706
-# Install dependencies for this app here
+# Don't edit this section (install). It should be the same for all cFS apps. -Ezra
 install:
- - git clone https://github.com/CACTUS-Mission/WiringPi.git
- - cd WiringPi
- - ./build
- - cd ..
-# Don't touch anything below this. Ever. You will regret it. -Ezra
-before_script:
  - git clone https://github.com/CACTUS-Mission/cFE.git
  - mkdir cFE/apps/$CFS_APP_NAME cFE/apps/$CFS_APP_NAME/fsw
  - rm -rf cFE/osal/
  - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
  - tar -xf osal-4.2.1a-release.tar.gz
  - mv osal-4.2.1a-release cFE/osal
+before_script:
+ - git clone https://github.com/CACTUS-Mission/WiringPi.git
+ - mv WiringPi/wiringPi/* cFE/apps/inc
 script:
  - mv for_build cFE/apps/$CFS_APP_NAME/fsw
  - mv mission_inc cFE/apps/$CFS_APP_NAME/fsw

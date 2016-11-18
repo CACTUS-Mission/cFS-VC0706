@@ -31,7 +31,6 @@ void updatePhotoCount(uint8 pic_count);
 */
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
 extern struct led_t led;
-extern struct mux_t mux;
 extern struct Camera_t cam;
 
 extern char num_reboots[3];
@@ -67,15 +66,6 @@ int VC0706_takePics(void)
     led_init(&led, (int)LED_PIN);
 
     /*
-    ** Initialize MUX
-    */
-    if(mux_init(&mux, (int)MUX_SEL_PIN) == -1)
-    {
-        OS_printf("MUX initialization error.\n");
-        return -1;
-    }
-
-    /*
     ** Attempt to initalize Camera
     */
     if(init(&cam) == -1) // Error
@@ -97,18 +87,8 @@ int VC0706_takePics(void)
     ** w/ no delay
     */
     unsigned int num_pics_stored = 1;
-    for ( ;; ) // NOTE: we will need to add flash and MUX implementation. Easy, but should be broken into separate headers.
+    for ( ;; )
     {
-
-       /*
-  g++ vc0706_test.cpp -o vc0706_test -lwiringPig++ vc0706_test.cpp -o vc0706_test -lwiringPi      ** Switch Cameras -- Has not been tested with hardware yet
-        */
-        if( mux_switch(&mux) == -1)
-		{
-            OS_printf("vc0706::mux_switch() failed.\n");
-		} // Only fails if mux_state != 0|1
-
-    	//OS_printf("Switched camera. MUX State: %d\n", mux.mux_state);
 
         /*
         ** Get camera version, another way to check that the camera is working properly. Also necessary for initialization.
@@ -131,7 +111,7 @@ int VC0706_takePics(void)
 		//OS_printf("VC0706: Calling sprintf()...\n");
         
         int ret = 0;
-        ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, mux.mux_state, num_pics_stored); // cFS /exe relative path
+        ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, cam->ttyInterface, num_pics_stored); // cFS /exe relative path
         if(ret < 0)
         {
             OS_printf("sprintf err: %s\n", strerror(ret));

@@ -11,21 +11,21 @@
 */
 extern struct led_t led;
 
-/*
-** External mux structure -- for error data
-*/
-extern struct mux_t mux;
-
-
-
-int init(Camera_t *cam) {
+/**
+ * @param ttyInterface - The serial (TX/RX) interface the camera is plugged into. In the case of the CACTUS-1 Pi-Sat boards, 0 and 1 are valid.
+ */
+int init(Camera_t *cam, uint8 ttyInterface) {
+    char* fdPath;
+    // Create the file path for the TTY interface from a format string and the ttyInterface parameter
+    asprintf(&fdPath, "/dev/ttyAMA%d", ttyInterface);
+    cam->ttyInterface = ttyInterface;
     cam->frameptr = 0;
     cam->bufferLen = 0;
     cam->serialNum = 0;
     cam->motion = 1;
     cam->ready = 1;
     cam->empty = "";
-    if ((cam->fd = serialOpen("/dev/ttyAMA0", BAUD)) < 0)
+    if ((cam->fd = serialOpen(fdPath, BAUD)) < 0)
     {
         //fprintf(stderr, "SPI Setup Failed: %s\n", strerror(errno));
     	CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR, "init Error: Failed to open specified port at %s. STDERR: %s", "/dev/ttyAMA0", strerror(errno));
@@ -69,10 +69,7 @@ bool checkReply(Camera_t *cam, int cmd, int size) {
     //Check the reply
     if (reply[0] != 0x76 || reply[1] != 0x00 || reply[2] != cmd)
     {
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive. reply[0]: %x, expected: %x reply[1]: %x, expected: %x", mux.mux_state, reply[0], 0x76, reply[1], 0x00);
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"\treply[2]: %x, expected: %x STRERROR: %s", reply[2], cmd, strerror(errno));
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive!", mux.mux_state);
-        CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", mux.mux_state, reply[0], reply[1], reply[2]);
+        CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", cam->ttyInterface, reply[0], reply[1], reply[2]);
         return false;
     }
     else
@@ -246,11 +243,7 @@ char * takePicture(Camera_t *cam, char * file_path)
     //OS_printf("Length %u \n", len);
 
     if(len > 20000){
-        //OS_printf("Camera returned en:%u too Large for camera buffer size. Should be <= 20000 \n", len);
-        /*
-        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Image length reported from Camera %d too large for camera buffer. len reported: %u, expected value <= 20000. Attempting to take another image with same name.", mux.mux_state, len);
-        */
-        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Camera %d  image too large. Length [%u] Expected <= 20000", mux.mux_state, len);
+        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Camera %d  image too large. Length [%u] Expected <= 20000", cam->ttyInterface, len);
         resumeVideo(cam);
         clearBuffer(cam);
         return takePicture(cam, file_path);
@@ -357,7 +350,7 @@ char * takePicture(Camera_t *cam, char * file_path)
     //Clear Buffer
     clearBuffer(cam);
 
-    CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_ERROR, "Camera %d stored as <%s>", mux.mux_state, cam->imageName);
+    CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_ERROR, "Camera %d stored as <%s>", cam->ttyInterface, cam->imageName);
     return cam->imageName;
 }
 

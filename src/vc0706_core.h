@@ -72,6 +72,7 @@
 typedef struct Camera_t {
     int motion;
     int ready;
+    int ttyInterface;
     int fd;
 
     int frameptr;

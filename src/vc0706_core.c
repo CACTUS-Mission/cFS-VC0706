@@ -53,15 +53,9 @@ int init(Camera_t *cam, uint8 ttyInterface)
     return 0;
 }
 
-/**
- * Ensure that the camera has responded properly to a specified command.
- * \param cam - A pointer to the Camera to check
- * \param cmd - The command previously issued (which we are looking for a response to)
- * \param size - The size of the response the camera SHOULD reply with
- */
-bool checkReply(Camera_t *cam, int cmd, int size)
+char* readCamera(Camera_t *cam, int size)
 {
-    int reply[size];   /**< Buffer to read the camera's reply into */
+    char reply[size];   /**< Buffer to read the camera's reply into */
     int try_count = 0; /**< Failed read attempt count. Used to drop out of loop if camera fails. */
     int length = 0;    /**< Length of the reply that has been received so far */
     /** 
@@ -88,7 +82,18 @@ bool checkReply(Camera_t *cam, int cmd, int size)
             try_count = 0;
         }
     }
+    return reply;
+}
 
+/**
+ * Ensure that the camera has responded properly to a specified command.
+ * \param cam - A pointer to the Camera to check
+ * \param cmd - The command previously issued (which we are looking for a response to)
+ * \param size - The size of the response the camera SHOULD reply with
+ */
+bool checkReply(Camera_t *cam, int cmd, int size)
+{
+    char* reply = readCamera(cam, size);
     // Check if the reply is valid
     bool replyValidity = reply[0] == 0x76 && reply[1] == 0x00 && reply[2] == cmd;
     if (!replyValidity)
@@ -130,8 +135,7 @@ void reset(Camera_t *cam)
     serialPutchar(cam->fd, (char)RESET);
     serialPutchar(cam->fd, (char)0x00);
 
-    if (checkReply(cam, RESET, 5) != true)
-    {
+    if (!checkReply(cam, RESET, 5))
         OS_printf("reset() Check Reply Status: %s\n", strerror(errno));
     }
     clearBuffer(cam);

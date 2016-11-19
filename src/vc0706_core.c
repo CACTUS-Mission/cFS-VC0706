@@ -54,39 +54,47 @@ int init(Camera_t *cam, uint8 ttyInterface)
 }
 
 /**
- * 
+ * Ensure that the camera has responded properly to a specified command.
+ * \param cam - A pointer to the Camera to check
+ * \param cmd - The command previously issued (which we are looking for a response to)
+ * \param size - The size of the response the camera SHOULD reply with
  */
 bool checkReply(Camera_t *cam, int cmd, int size)
 {
-    int reply[size];
-    int t_count = 0;
-    int length = 0;
-    int avail = 0;
-    int timeout = 3 * TO_SCALE; // test 3 was 5
+    int reply[size];   /**< Buffer to read the camera's reply into */
+    int try_count = 0; /**< Failed read attempt count. Used to drop out of loop if camera fails. */
+    int length = 0;    /**< Length of the reply that has been received so far */
+    /** 
+     * Max amount of times to try reading the serial interface.
+     * TO_SCALE, defined in vc0706_core.h, scales timeout as a multiple of 3 
+     */
+    const int timeout = 3 * TO_SCALE;
 
-    while ((timeout != t_count) && (length != CAMERABUFFSIZ) && length < size)
+    // While communication hasn't timed out, the data received is less than the buffer size and requested size..
+    while ((timeout <= try_count) && (length <= CAMERABUFFSIZ) && length < size)
     {
-        avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
+        // If a byte is not waiting to be read on the serial interface
+        if (serialDataAvail(cam->fd) <= 0)
         {
+            // Sleep for however long is defined in vc0706_core.h
             usleep(TO_U);
-            t_count++;
-            continue;
+            try_count++;
         }
-        t_count = 0;
-        // there's a byte!
-        int newChar = serialGetchar(cam->fd);
-        reply[length++] = (char)newChar;
+        else
+        {
+            // There's a byte! Read it into reply[].
+            reply[length++] = (char)serialGetchar(cam->fd);
+            // Reset timeout between received characters
+            try_count = 0;
+        }
     }
 
-    //Check the reply
-    if (reply[0] != 0x76 || reply[1] != 0x00 || reply[2] != cmd)
-    {
+    // Check if the reply is valid
+    bool replyValidity = reply[0] == 0x76 && reply[1] == 0x00 && reply[2] == cmd;
+    if (!replyValidity)
         CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR, "Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", cam->ttyInterface, reply[0], reply[1], reply[2]);
-        return false;
-    }
-    else
-        return true;
+    // Return the reply's validity as the execution status of this function
+    return replyValidity;
 }
 
 void clearBuffer(Camera_t *cam)

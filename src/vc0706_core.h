@@ -79,7 +79,6 @@ typedef struct Camera_t {
     int frameptr;
     int bufferLen;
     int serialNum;
-    char camerabuff[CAMERABUFFSIZ+1];
     char serialHeader[5];
     char imageName[OS_MAX_PATH_LEN]; // cFS defined
     char * empty;

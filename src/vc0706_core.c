@@ -53,19 +53,20 @@ int init(Camera_t *cam, uint8 ttyInterface)
     return 0;
 }
 
-char* readCamera(Camera_t *cam, int size)
+/**
+ * Reads data from a connected camera.
+ * \param cam - A pointer to the Camera representing the camera to read from.
+ * \param size - The maximum message size to read.
+ * \param readTimeout - The maximum attempts between successful reads
+ */
+char* readCamera(Camera_t *cam, int size, const int readTimeout)
 {
     char reply[size];   /**< Buffer to read the camera's reply into */
     int try_count = 0; /**< Failed read attempt count. Used to drop out of loop if camera fails. */
     int length = 0;    /**< Length of the reply that has been received so far */
-    /** 
-     * Max amount of times to try reading the serial interface.
-     * TO_SCALE, defined in vc0706_core.h, scales timeout as a multiple of 3 
-     */
-    const int timeout = 3 * TO_SCALE;
 
     // While communication hasn't timed out, the data received is less than the buffer size and requested size..
-    while ((timeout <= try_count) && (length <= CAMERABUFFSIZ) && length < size)
+    while ((readTimeout < try_count) && (length < CAMERABUFFSIZ) && length < size)
     {
         // If a byte is not waiting to be read on the serial interface
         if (serialDataAvail(cam->fd) <= 0)
@@ -93,7 +94,9 @@ char* readCamera(Camera_t *cam, int size)
  */
 bool checkReply(Camera_t *cam, int cmd, int size)
 {
-    char* reply = readCamera(cam, size);
+    // Timeout between serial reads. TO_SCALE is a setting in vc0706_core.h to modify all timeouts at once.
+    int timeout = 3 * TO_SCALE;
+    char* reply = readCamera(cam, size, timeout);
     // Check if the reply is valid
     bool replyValidity = reply[0] == 0x76 && reply[1] == 0x00 && reply[2] == cmd;
     if (!replyValidity)
@@ -102,24 +105,17 @@ bool checkReply(Camera_t *cam, int cmd, int size)
     return replyValidity;
 }
 
+/**
+ * Reads queued bytes out of the specified camera's buffer. Effectively a buffer flush.
+ * \param cam - A pointer to the Camera to clear
+ */
 void clearBuffer(Camera_t *cam)
 {
-    int t_count = 0;
-    int length = 0;
-    int timeout = 2 * TO_SCALE;
-
-    while ((timeout != t_count) && (length != CAMERABUFFSIZ))
+    for (int bytesCleared = 0; bytesCleared < CAMERABUFFSIZ; bytesCleared++)
     {
-        int avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
-        {
-            t_count++;
-            continue;
-        }
-        t_count = 0;
-        // there's a byte!
-        serialGetchar(cam->fd);
-        length++;
+        // If there's a byte available, read it, but don't store it anywhere.
+        if (serialDataAvail(cam->fd) > 0)
+            serialGetchar(cam->fd);
     }
 }
 
@@ -157,7 +153,7 @@ void resumeVideo(Camera_t *cam)
 }
 
 /**
- * Makes sure  the version of the specified camera.
+ * Issues a version command to the camera to make sure the camera is connected.
  * \param cam - A pointer to the Camera representing the camera to query.
  */
 int getVersion(Camera_t *cam)
@@ -171,32 +167,15 @@ int getVersion(Camera_t *cam)
     {
         //OS_printf("CAMERA NOT FOUND!!!\n");
         return -1;
+    } else {
+        return 0;
     }
-    //OS_printf("VC0706: check Reply returned: %d\n", reply);
-    int counter = 0;
-    cam->bufferLen = 0;
-    int timeout = 1 * TO_SCALE;
-
-    while ((timeout != counter) && (cam->bufferLen != CAMERABUFFSIZ))
-    {
-        if (serialDataAvail(cam->fd) <= 0)
-        {
-            usleep(TO_U);
-            counter++;
-            continue;
-        }
-        counter = 0;
-        // there's a byte!
-        int newChar = serialGetchar(cam->fd);
-        cam->camerabuff[cam->bufferLen++] = (char)newChar;
-    }
-
-    cam->camerabuff[cam->bufferLen] = '\0';
-    //OS_printf("VC0706: camera Version: '%s'\n", (char *)cam->camerabuff);
-    //OS_printf("getVersion() returning.\n");
-    return 0;
 }
 
+/**
+ * Enables or disables motion detection on the specified camera
+ * \param cam - A pointer to the camera to set the motion detection flag on
+ */
 void setMotionDetect(Camera_t *cam, int flag)
 {
     serialPutchar(cam->fd, (char)COMMAND_BEGIN);
@@ -217,6 +196,11 @@ void setMotionDetect(Camera_t *cam, int flag)
     clearBuffer(cam);
 }
 
+/**
+ * Takes a picture and writes it to disk.
+ * \param cam - A pointer to the camera to take a picture with
+ * \param file_path - The name of the file to save to
+ */
 char *takePicture(Camera_t *cam, char *file_path)
 {
     cam->frameptr = 0;

@@ -137,10 +137,13 @@ void reset(Camera_t *cam)
 
     if (!checkReply(cam, RESET, 5))
         OS_printf("reset() Check Reply Status: %s\n", strerror(errno));
-    }
     clearBuffer(cam);
 }
 
+/**
+ * Issues a resume video command to the specified camera.
+ * \param cam - A pointer to the Camera representing the camera to resume.
+ */
 void resumeVideo(Camera_t *cam)
 {
     serialPutchar(cam->fd, (char)COMMAND_BEGIN);
@@ -149,20 +152,22 @@ void resumeVideo(Camera_t *cam)
     serialPutchar(cam->fd, (char)0x01);
     serialPutchar(cam->fd, (char)RESUMEFRAME);
 
-    if (checkReply(cam, FBUF_CTRL, 5) == false)
+    if (!checkReply(cam, FBUF_CTRL, 5))
         OS_printf("Camera did not resume\n");
 }
 
+/**
+ * Makes sure  the version of the specified camera.
+ * \param cam - A pointer to the Camera representing the camera to query.
+ */
 int getVersion(Camera_t *cam)
 {
-    //OS_printf("getVersion() called.\n");
     serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)GEN_VERSION);
     serialPutchar(cam->fd, (char)0x00);
 
-    bool reply;
-    if ((reply = checkReply(cam, GEN_VERSION, 5)) == false)
+    if (!checkReply(cam, GEN_VERSION, 5))
     {
         //OS_printf("CAMERA NOT FOUND!!!\n");
         return -1;
@@ -170,13 +175,11 @@ int getVersion(Camera_t *cam)
     //OS_printf("VC0706: check Reply returned: %d\n", reply);
     int counter = 0;
     cam->bufferLen = 0;
-    int avail = 0;
     int timeout = 1 * TO_SCALE;
 
     while ((timeout != counter) && (cam->bufferLen != CAMERABUFFSIZ))
     {
-        avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
+        if (serialDataAvail(cam->fd) <= 0)
         {
             usleep(TO_U);
             counter++;
@@ -188,7 +191,7 @@ int getVersion(Camera_t *cam)
         cam->camerabuff[cam->bufferLen++] = (char)newChar;
     }
 
-    cam->camerabuff[cam->bufferLen] = 0;
+    cam->camerabuff[cam->bufferLen] = '\0';
     //OS_printf("VC0706: camera Version: '%s'\n", (char *)cam->camerabuff);
     //OS_printf("getVersion() returning.\n");
     return 0;

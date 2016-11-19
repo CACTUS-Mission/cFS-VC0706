@@ -72,7 +72,7 @@
 
 typedef struct Camera_t {
     int motion;
-    boolean ready;
+    bool ready;
     int ttyInterface;
     int fd;
 
@@ -81,7 +81,6 @@ typedef struct Camera_t {
     int serialNum;
     char serialHeader[5];
     char imageName[OS_MAX_PATH_LEN]; // cFS defined
-    char * empty;
 } Camera_t;
 
 

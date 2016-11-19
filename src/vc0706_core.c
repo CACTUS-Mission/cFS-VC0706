@@ -111,7 +111,8 @@ bool checkReply(Camera_t *cam, int cmd, int size)
  */
 void clearBuffer(Camera_t *cam)
 {
-    for (int bytesCleared = 0; bytesCleared < CAMERABUFFSIZ; bytesCleared++)
+    int bytesCleared;
+    for (bytesCleared = 0; bytesCleared < CAMERABUFFSIZ; bytesCleared++)
     {
         // If there's a byte available, read it, but don't store it anywhere.
         if (serialDataAvail(cam->fd) > 0)

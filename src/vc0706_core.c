@@ -2,173 +2,183 @@
  * Retrieved from https://github.com/vyykn/VC0706
  *
  * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission
+ * Edited by Ezra Brooks for use on TRAPSat aboard the CACTUS-1 Mission
  */
 
 #include "vc0706_core.h"
 
-/*
-** External led structure
-*/
-extern struct led_t led;
+extern struct led_t led; /**< LED instance from vc0706.c */
 
-/*
-** External mux structure -- for error data
-*/
-extern struct mux_t mux;
+/**
+ * Initializes the cameras' serial interfaces.
+ * \param cam - A pointer to the Camera structure to initialize
+ * \param ttyInterface - The serial (TX/RX) interface the camera is plugged into. In the case of the CACTUS-1 Pi-Sat boards, 0 and 1 are valid.
+ */
+int init(Camera_t *cam, uint8 ttyInterface)
+{
+    // Initialize fdPath to the length of "/dev/ttyAMA0" (plus string terminator obviously)
+    char fdPath[13];
 
+    // Create the file path for the TTY interface from a format string and the ttyInterface parameter
+    snprintf(fdPath, 13, "/dev/ttyAMA%d", ttyInterface);
 
+    // Set ttyInterface attribute on Camera
+    cam->ttyInterface = ttyInterface;
 
-int init(Camera_t *cam) {
+    // Initialize default Camera member values
     cam->frameptr = 0;
     cam->bufferLen = 0;
     cam->serialNum = 0;
     cam->motion = 1;
-    cam->ready = 1;
-    cam->empty = "";
-    if ((cam->fd = serialOpen("/dev/ttyAMA0", BAUD)) < 0)
+    cam->ready = false;
+
+    // Open serial device, send error message as CFE event if it fails (returns code other than 0)
+    if ((cam->fd = serialOpen(fdPath, BAUD)) < 0)
     {
-        //fprintf(stderr, "SPI Setup Failed: %s\n", strerror(errno));
-    	CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR, "init Error: Failed to open specified port at %s. STDERR: %s", "/dev/ttyAMA0", strerror(errno));
-    	return -1;
+        CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR, "init Error: Failed to open specified port at %s. STDERR: %s", "/dev/ttyAMA0", strerror(errno));
+        return -1;
     }
 
+    // Initialize WiringPi, send error message as CFE event if it fails (returns -1 error code)
     if (wiringPiSetup() == -1)
     {
-        //OS_printf("wiringPiSetup(0 failed.\n");
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
-            "init Error: wiringPiSetup() failed.");
-	    return -1;
+                          "init Error: wiringPiSetup() failed.");
+        return -1;
     }
 
-    cam->ready = 1;
-	return 0;
+    // Once the serial interface and WiringPi have been initialized, the camera is ready.
+    cam->ready = true;
+    return 0;
 }
 
-bool checkReply(Camera_t *cam, int cmd, int size) {
-    int reply[size];
-    int t_count = 0;
-    int length = 0;
-    int avail = 0;
-    int timeout = 3 * TO_SCALE; // test 3 was 5
+/**
+ * Reads data from a connected camera.
+ * \param cam - A pointer to the Camera representing the camera to read from.
+ * \param size - The maximum message size to read.
+ * \param readTimeout - The maximum attempts between successful reads
+ */
+char* readCamera(Camera_t *cam, int size, const int readTimeout)
+{
+    char reply[size];   /**< Buffer to read the camera's reply into */
+    int try_count = 0; /**< Failed read attempt count. Used to drop out of loop if camera fails. */
+    int length = 0;    /**< Length of the reply that has been received so far */
 
-    while ((timeout != t_count) && (length != CAMERABUFFSIZ) && length < size)
+    // While communication hasn't timed out, the data received is less than the buffer size and requested size..
+    while ((readTimeout < try_count) && (length < CAMERABUFFSIZ) && length < size)
     {
-        avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
+        // If a byte is not waiting to be read on the serial interface
+        if (serialDataAvail(cam->fd) <= 0)
         {
+            // Sleep for however long is defined in vc0706_core.h
             usleep(TO_U);
-            t_count++;
-            continue;
+            try_count++;
         }
-        t_count = 0;
-        // there's a byte!
-        int newChar = serialGetchar(cam->fd);
-        reply[length++] = (char)newChar;
-    }
-
-    //Check the reply
-    if (reply[0] != 0x76 || reply[1] != 0x00 || reply[2] != cmd)
-    {
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive. reply[0]: %x, expected: %x reply[1]: %x, expected: %x", mux.mux_state, reply[0], 0x76, reply[1], 0x00);
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"\treply[2]: %x, expected: %x STRERROR: %s", reply[2], cmd, strerror(errno));
-        //CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive!", mux.mux_state);
-        CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR,"Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", mux.mux_state, reply[0], reply[1], reply[2]);
-        return false;
-    }
-    else
-        return true;
-}
-
-void clearBuffer(Camera_t *cam) {
-    int t_count = 0;
-    int length = 0;
-    int timeout = 2 * TO_SCALE;
-
-    while ((timeout != t_count) && (length != CAMERABUFFSIZ))
-    {
-        int avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
+        else
         {
-            t_count++;
-            continue;
+            // There's a byte! Read it into reply[].
+            reply[length++] = (char)serialGetchar(cam->fd);
+            // Reset timeout between received characters
+            try_count = 0;
         }
-        t_count = 0;
-        // there's a byte!
-        serialGetchar(cam->fd);
-        length++;
+    }
+    return reply;
+}
+
+/**
+ * Ensure that the camera has responded properly to a specified command.
+ * \param cam - A pointer to the Camera to check
+ * \param cmd - The command previously issued (which we are looking for a response to)
+ * \param size - The size of the response the camera SHOULD reply with
+ */
+bool checkReply(Camera_t *cam, int cmd, int size)
+{
+    // Timeout between serial reads. TO_SCALE is a setting in vc0706_core.h to modify all timeouts at once.
+    int timeout = 3 * TO_SCALE;
+    char* reply = readCamera(cam, size, timeout);
+    // Check if the reply is valid
+    bool replyValidity = reply[0] == 0x76 && reply[1] == 0x00 && reply[2] == cmd;
+    if (!replyValidity)
+        CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR, "Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", cam->ttyInterface, reply[0], reply[1], reply[2]);
+    // Return the reply's validity as the execution status of this function
+    return replyValidity;
+}
+
+/**
+ * Reads queued bytes out of the specified camera's buffer. Effectively a buffer flush.
+ * \param cam - A pointer to the Camera to clear
+ */
+void clearBuffer(Camera_t *cam)
+{
+    int bytesCleared;
+    for (bytesCleared = 0; bytesCleared < CAMERABUFFSIZ; bytesCleared++)
+    {
+        // If there's a byte available, read it, but don't store it anywhere.
+        if (serialDataAvail(cam->fd) > 0)
+            serialGetchar(cam->fd);
     }
 }
 
-void reset(Camera_t *cam) {
-    // Camera Reset method
-    serialPutchar(cam->fd, (char)0x56);
+/**
+ * Issues a reset command to the specified camera.
+ * \param cam - A pointer to the Camera representing the camera to reset.
+ */
+void reset(Camera_t *cam)
+{
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
+    // Issue the camera reset command over serial
     serialPutchar(cam->fd, (char)RESET);
     serialPutchar(cam->fd, (char)0x00);
 
-    if (checkReply(cam, RESET, 5) != true)
-    {
+    if (!checkReply(cam, RESET, 5))
         OS_printf("reset() Check Reply Status: %s\n", strerror(errno));
-    }
     clearBuffer(cam);
 }
 
+/**
+ * Issues a resume video command to the specified camera.
+ * \param cam - A pointer to the Camera representing the camera to resume.
+ */
 void resumeVideo(Camera_t *cam)
 {
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)FBUF_CTRL);
     serialPutchar(cam->fd, (char)0x01);
     serialPutchar(cam->fd, (char)RESUMEFRAME);
 
-    if (checkReply(cam, FBUF_CTRL, 5) == false)
+    if (!checkReply(cam, FBUF_CTRL, 5))
         OS_printf("Camera did not resume\n");
 }
 
+/**
+ * Issues a version command to the camera to make sure the camera is connected.
+ * \param cam - A pointer to the Camera representing the camera to query.
+ */
 int getVersion(Camera_t *cam)
 {
-    //OS_printf("getVersion() called.\n");
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)GEN_VERSION);
     serialPutchar(cam->fd, (char)0x00);
 
-    bool reply;
-    if ((reply = checkReply(cam, GEN_VERSION, 5)) == false)
+    if (!checkReply(cam, GEN_VERSION, 5))
     {
         //OS_printf("CAMERA NOT FOUND!!!\n");
-	return -1;
+        return -1;
+    } else {
+        return 0;
     }
-	//OS_printf("VC0706: check Reply returned: %d\n", reply);
-    int counter = 0;
-    cam->bufferLen = 0;
-    int avail = 0;
-    int timeout = 1 * TO_SCALE;
-
-    while ((timeout != counter) && (cam->bufferLen != CAMERABUFFSIZ))
-    {
-        avail = serialDataAvail(cam->fd);
-        if (avail <= 0)
-        {
-            usleep(TO_U);
-            counter++;
-            continue;
-        }
-        counter = 0;
-        // there's a byte!
-        int newChar = serialGetchar(cam->fd);
-        cam->camerabuff[cam->bufferLen++] = (char)newChar;
-    }
-
-    cam->camerabuff[cam->bufferLen] = 0;
-    //OS_printf("VC0706: camera Version: '%s'\n", (char *)cam->camerabuff);
-    //OS_printf("getVersion() returning.\n");
-    return 0;
 }
 
+/**
+ * Enables or disables motion detection on the specified camera
+ * \param cam - A pointer to the camera to set the motion detection flag on
+ */
 void setMotionDetect(Camera_t *cam, int flag)
 {
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)0x00);
     serialPutchar(cam->fd, (char)0x42);
     serialPutchar(cam->fd, (char)0x04);
@@ -177,7 +187,7 @@ void setMotionDetect(Camera_t *cam, int flag)
     serialPutchar(cam->fd, (char)0x00);
     serialPutchar(cam->fd, (char)0x00);
 
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)COMM_MOTION_CTRL);
     serialPutchar(cam->fd, (char)0x01);
@@ -186,21 +196,22 @@ void setMotionDetect(Camera_t *cam, int flag)
     clearBuffer(cam);
 }
 
-char * takePicture(Camera_t *cam, char * file_path)
+/**
+ * Takes a picture and writes it to disk.
+ * \param cam - A pointer to the camera to take a picture with
+ * \param file_path - The name of the file to save to
+ */
+char *takePicture(Camera_t *cam, char *file_path)
 {
     cam->frameptr = 0;
-
-    //OS_printf("takePicture() called.\n");
-
     // Enable LED
-    //OS_printf("LED ON\n");
-    led_on(&led); // initialized in vc0706_device.c
+    led_on(&led);     // initialized in vc0706_device.c
     OS_TaskDelay(50); // wait one 1ms to allow the LED to heat up
 
-    //Clear Buffer
+    // Clear Buffer
     clearBuffer(cam);
 
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)FBUF_CTRL);
     serialPutchar(cam->fd, (char)0x01);
@@ -208,29 +219,29 @@ char * takePicture(Camera_t *cam, char * file_path)
 
     // Disable LED
     led_off(&led);
-    //OS_printf("LED OFF\n");
 
-    if (checkReply(cam, FBUF_CTRL, 5) == false)
+    if (!checkReply(cam, FBUF_CTRL, 5))
     {
         OS_printf("Frame checkReply Failed\n");
-        return cam->empty;
+        return "";
     }
 
     //OS_printf("VC0706_core::takePicture() retrieving FBUFF_LEN...\n");
 
-    serialPutchar(cam->fd, (char)0x56);
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)GET_FBUF_LEN);
     serialPutchar(cam->fd, (char)0x01);
     serialPutchar(cam->fd, (char)0x00);
 
-    if (checkReply(cam, GET_FBUF_LEN, 5) == false)
+    if (!checkReply(cam, GET_FBUF_LEN, 5))
     {
         OS_printf("FBUF_LEN REPLY NOT VALID!!!\n");
-        return cam->empty;
+        return "";
     }
 
-    while(serialDataAvail(cam->fd) <= 0){;}
+    // Wait for picture data to be available for reading
+    while (serialDataAvail(cam->fd) <= 0);
 
     //OS_printf("Serial Data Avail %d \n", serialDataAvail(cam->fd));
 
@@ -245,18 +256,15 @@ char * takePicture(Camera_t *cam, char * file_path)
 
     //OS_printf("Length %u \n", len);
 
-    if(len > 20000){
-        //OS_printf("Camera returned en:%u too Large for camera buffer size. Should be <= 20000 \n", len);
-        /*
-        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Image length reported from Camera %d too large for camera buffer. len reported: %u, expected value <= 20000. Attempting to take another image with same name.", mux.mux_state, len);
-        */
-        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Camera %d  image too large. Length [%u] Expected <= 20000", mux.mux_state, len);
+    if (len > 20000)
+    {
+        CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Camera %d  image too large. Length [%u] Expected <= 20000", cam->ttyInterface, len);
         resumeVideo(cam);
         clearBuffer(cam);
         return takePicture(cam, file_path);
     }
     //char image[len];
-    char * image = malloc(len+1);
+    char *image = malloc(len + 1);
     //image[len+1] = NULL;
 
     int imgIndex = 0;
@@ -265,7 +273,7 @@ char * takePicture(Camera_t *cam, char * file_path)
     {
         unsigned int readBytes = len;
 
-        serialPutchar(cam->fd, (char)0x56);
+        serialPutchar(cam->fd, (char)COMMAND_BEGIN);
         serialPutchar(cam->fd, (char)cam->serialNum);
         serialPutchar(cam->fd, (char)READ_FBUF);
         serialPutchar(cam->fd, (char)0x0C);
@@ -282,10 +290,10 @@ char * takePicture(Camera_t *cam, char * file_path)
         serialPutchar(cam->fd, (char)(CAMERADELAY >> 8));
         serialPutchar(cam->fd, (char)(CAMERADELAY & 0xFF));
 
-        if (checkReply(cam, READ_FBUF, 5) == false)
+        if (!checkReply(cam, READ_FBUF, 5))
         {
-	    OS_printf("VC0706: Error! checkReply(cam, READ_FBUF, 5) returned false.\n");
-            return cam->empty;
+            OS_printf("VC0706: Error! checkReply(cam, READ_FBUF, 5) returned false.\n");
+            return "";
         }
 
         int counter = 0;
@@ -306,7 +314,7 @@ char * takePicture(Camera_t *cam, char * file_path)
             counter = 0;
             int newChar = serialGetchar(cam->fd);
 
-	    image[imgIndex++] = (char)newChar;
+            image[imgIndex++] = (char)newChar;
 
             cam->bufferLen++;
         }
@@ -314,50 +322,30 @@ char * takePicture(Camera_t *cam, char * file_path)
         cam->frameptr += readBytes;
         len -= readBytes;
 
-        if (checkReply(cam, READ_FBUF, 5) == false)
+        if (!checkReply(cam, READ_FBUF, 5))
         {
             OS_printf("ERROR READING END OF CHUNK| start: %u | length: %u\n", cam->frameptr, len);
         }
     }
 
-    //OS_printf("VC0706_CORE: Attempting to open file...\n");
-    // FILE *jpg = fopen(file_path, "w");
     int32 pic_fd = OS_creat(file_path, (int32)OS_READ_WRITE);
-    //if (jpg != NULL)
-    if(!(pic_fd < OS_FS_SUCCESS)) // if successful file creat
-    {	// test
-	//int i=0;
-	//while(image[i] != '\0')
-	//{
-	//	i++;
-	//}
-	//printf("VC0706: Manual determined length of image: %d bytes\n", i);
-        //size_t stored = fwrite(image, sizeof(image[0]), imgIndex, jpg);
-        //fclose(jpg);
-	OS_write(pic_fd, (void *)image, imgIndex);
-	OS_close(pic_fd);
-	//printf("VC0706: number of stored bytes:%zu\n", stored);
-	//if((size_t)i != stored)
-	//{
-    	//    OS_printf("VC0706 ERROR: image stored %zu bytes, expected to store %d bytes\n", stored, i);
-	//}
+    if (!(pic_fd < OS_FS_SUCCESS)) // if successful file creat
+    {
+        OS_write(pic_fd, (void *)image, imgIndex);
+        OS_close(pic_fd);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_ERROR, "IMAGE FILE COULD NOT BE OPENED/MADE!");
-        //OS_printf("IMAGE COULD NOT BE OPENED/MADE!\n"); // Should get EVS
-	return (char *)NULL;
+        return (char *)NULL;
     }
 
-    //OS_printf("VC0706: copying file_path <%s> of size %d to imageName\n", file_path, strlen(file_path));
-    //strcpy(cam->imageName, file_path);
     strncpy(cam->imageName, file_path, strlen(file_path));
     resumeVideo(cam);
 
     //Clear Buffer
     clearBuffer(cam);
 
-    CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_ERROR, "Camera %d stored as <%s>", mux.mux_state, cam->imageName);
+    CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_ERROR, "Camera %d stored as <%s>", cam->ttyInterface, cam->imageName);
     return cam->imageName;
 }
-

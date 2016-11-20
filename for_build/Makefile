@@ -21,7 +21,7 @@ ENTRY_PT = VC0706_AppMain
 #
 # Object files required to build subsystem.
 #
-OBJS = vc0706_mux.o vc0706_led.o vc0706.o vc0706_core.o vc0706_child.o vc0706_device.o
+OBJS = vc0706_led.o vc0706.o vc0706_core.o vc0706_child.o vc0706_device.o
 
 #
 # Source files required to build subsystem; used to generate dependencies.

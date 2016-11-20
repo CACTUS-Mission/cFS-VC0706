@@ -30,6 +30,7 @@
 // Brian's Defines
 #define BAUD 38400
 
+#define COMMAND_BEGIN 0x56
 #define RESET 0x26
 #define GEN_VERSION 0x11
 #define READ_FBUF 0x32
@@ -71,20 +72,19 @@
 
 typedef struct Camera_t {
     int motion;
-    int ready;
+    bool ready;
+    int ttyInterface;
     int fd;
 
     int frameptr;
     int bufferLen;
     int serialNum;
-    char camerabuff[CAMERABUFFSIZ+1];
     char serialHeader[5];
     char imageName[OS_MAX_PATH_LEN]; // cFS defined
-    char * empty;
 } Camera_t;
 
 
-int init(Camera_t *cam);
+int init(Camera_t *cam, uint8 ttyInterface);
 bool checkReply(Camera_t *cam, int cmd, int size);
 void clearBuffer(Camera_t *cam);
 void reset(Camera_t *cam);

@@ -1,67 +1,44 @@
-/*
-** Required Headers
-*/
 #include "vc0706_child.h"
-/*
-#include "vc0706_perfids.h"
-#include "vc0706_msgids.h"
-#include "vc0706_msg.h"
-#include "vc0706_events.h"
-#include "vc0706_version.h"
-#include "vc0706_child.h"
-*/
 
 char num_reboots[3];
 
+// Command packet from vc0706.c
 extern VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt;
 
-int VC0706_takePics(void);
+// From vc0706_device.c
+extern int VC0706_takePics(void);
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* VC0706 child task -- startup initialization                     */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-int32 VC0706_ChildInit(void)
+/**
+ * Initialization function for the VC0706 child task
+ */
+int VC0706_ChildInit()
 {
-    char *TaskText = "VC0706 Child Task";
-    int32 Result;
-    
-    
-    /*
-    ** Read number of reboots
-    */
+    char* TaskText = "VC0706 Child Task";
+    int32 result;
+
+    // Read number of reboots
     setNumReboots();
 
-    /* Create child task - VC0706 monitor task */
-    Result = CFE_ES_CreateChildTask(&VC0706_ChildTaskID,
-                                     VC0706_CHILD_TASK_NAME,
-                                     (void *) VC0706_ChildTask, 0,
-                                     VC0706_CHILD_TASK_STACK_SIZE,
-                                     VC0706_CHILD_TASK_PRIORITY, 0);
-    if (Result != CFE_SUCCESS)
+    // Create child task - VC0706 monitor task
+    result = CFE_ES_CreateChildTask(&VC0706_ChildTaskID,
+                                    VC0706_CHILD_TASK_NAME,
+                                    (void *)VC0706_ChildTask, 0,
+                                    VC0706_CHILD_TASK_STACK_SIZE,
+                                    VC0706_CHILD_TASK_PRIORITY, 0);
+    if (result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
-           "%s initialization error: create task failed: result = %d",
-            TaskText, Result);
+                          "%s initialization error: create task failed: result = %d",
+                          TaskText, result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
-           "%s initialization info: create task complete: result = %d",
-            TaskText, Result);
+                          "%s initialization info: create task complete: result = %d",
+                          TaskText, result);
     }
-
-
-    if (Result != CFE_SUCCESS)
-    {
-    	return(Result);
-    }
-
-    return CFE_SUCCESS;
-
-} /* End of VC0706_ChildInit() */
+    return result;
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
@@ -69,106 +46,99 @@ int32 VC0706_ChildInit(void)
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void VC0706_ChildTask(void)
+void VC0706_ChildTask()
 {
-    char *TaskText = "VC0706 Child Task";
-    int32 Result;
+    char* TaskText = "VC0706 Child Task";
+    int32 result;
 
-    /*
-    ** The child task runs until the parent dies (normal end) or
-    **  until it encounters a fatal error (semaphore error, etc.)...
-    */
-    Result = CFE_ES_RegisterChildTask();
+    // The child task runs until the parent dies (normal end) or until it encounters a fatal error (semaphore error, etc.)...
+    result = CFE_ES_RegisterChildTask();
 
-    if (Result != CFE_SUCCESS)
+    if (result != CFE_SUCCESS)
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
-           "%s initialization error: register child failed: result = %d",
-            TaskText, Result);
+                          "%s initialization error: register child failed: result = %d",
+                          TaskText, result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
-           "%s initialization complete", TaskText);
+                          "%s initialization complete", TaskText);
 
-        /*
-        ** Child task process loop
-        */
+        // Child task process loop
         VC0706_takePics();
-        /*VC0706_ChildLoop();*/
     }
 
     /* This call allows cFE to clean-up system resources */
     CFE_ES_ExitChildTask();
-
-    return;
-
-} /* End of VC0706_ChildTask() */
+}
 
 int VC0706_SendTimFileName(char *file_name)
 {
-    CFE_SB_InitMsg((void *) &VC0706_ImageCmdPkt, (CFE_SB_MsgId_t) VC0706_IMAGE_CMD_MID, (uint16) VC0706_IMAGE_CMD_LNGTH, (boolean) 1 );
+    CFE_SB_InitMsg((void *)&VC0706_ImageCmdPkt, (CFE_SB_MsgId_t)VC0706_IMAGE_CMD_MID, (uint16)VC0706_IMAGE_CMD_LNGTH, (boolean)1);
 
     int32 ret = 0;
-    
+
     /*
     ** Determine which camera is sending data, for Command Code determintation
     */
-    if(file_name[4] == '0')
+    if (file_name[4] == '0')
     {
-        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t) &VC0706_ImageCmdPkt, (uint16) VC0706_IMAGE0_CMD_CODE);
+        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&VC0706_ImageCmdPkt, (uint16)VC0706_IMAGE0_CMD_CODE);
     }
     else if (file_name[4] == '1')
     {
-        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t) &VC0706_ImageCmdPkt, (uint16) VC0706_IMAGE1_CMD_CODE);
+        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&VC0706_ImageCmdPkt, (uint16)VC0706_IMAGE1_CMD_CODE);
     }
     else
     {
         OS_printf("\tDid not recognize camera identifier in filename. Defaulting to Cam 0\n");
-        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t) &VC0706_ImageCmdPkt, (uint16) VC0706_IMAGE0_CMD_CODE);
+        ret = CFE_SB_SetCmdCode((CFE_SB_MsgPtr_t)&VC0706_ImageCmdPkt, (uint16)VC0706_IMAGE0_CMD_CODE);
     }
-    
-    if(ret < 0)
+
+    if (ret < 0)
     {
         OS_printf("VC0706: SendTimFileName() Set Cmd Code Ret [%d].\n", ret);
     }
 
-    //OS_printf("Copying filename [%s] into command packet.\n", file_name);
     snprintf(VC0706_ImageCmdPkt.ImageName, sizeof(VC0706_ImageCmdPkt.ImageName), "%s", file_name);
-    //OS_printf("Command packet holds: [%s].\n", VC0706_ImageCmdPkt.ImageName);
 
-    CFE_SB_GenerateChecksum((CFE_SB_MsgPtr_t) &VC0706_ImageCmdPkt);
-    
-    CFE_SB_SendMsg((CFE_SB_Msg_t *) &VC0706_ImageCmdPkt);
+    CFE_SB_GenerateChecksum((CFE_SB_MsgPtr_t)&VC0706_ImageCmdPkt);
 
-     CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_INFORMATION, "Message sent to TIM from VC0706.");
+    CFE_SB_SendMsg((CFE_SB_Msg_t *)&VC0706_ImageCmdPkt);
+
+    CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_INFORMATION, "Message sent to TIM from VC0706.");
 
     return 0;
 }
 
-void setNumReboots(void)
+/**
+ * Reads the number of reboots since mission start (from /ram/logs/reboot.txt file)
+ */
+void setNumReboots()
 {
-    //OS_printf("Inside VC get reboot\n");
-
+    // Reset all of the characters in num_reboots to NULL
     memset(num_reboots, '0', sizeof(num_reboots));
 
     mode_t mode = S_IWUSR | S_IRUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IROTH;
 
-    int32 fd = OS_open((const char *) "/ram/logs/reboot.txt", (int32) OS_READ_ONLY, (uint32) mode);
+    // Open the system's reboot log
+    int32 fd = OS_open((const char *)"/ram/logs/reboot.txt", (int32)OS_READ_ONLY, (uint32)mode);
 
-    if(fd < OS_FS_SUCCESS)
-    {
+    // Check for file open success
+    if (fd != OS_FS_SUCCESS)
         OS_printf("\tCould not open reboot file in VC, ret = %d!\n", fd);
-    }
 
-    int os_ret = OS_read((int32) fd, (void *) num_reboots, (uint32) 3);
-
-    if( os_ret < OS_FS_SUCCESS)
+    // Read three characters from file into num_reboots
+    int os_ret = OS_read(fd, (void *)num_reboots, 3);
+    // Make sure the above read completed successfully
+    if (os_ret != OS_FS_SUCCESS)
     {
+        // If not, set all num_reboots values to 9
         memset(num_reboots, '9', sizeof(num_reboots));
         OS_printf("\tCould not read from reboot file in VC, ret = %d!\n", os_ret);
     }
 
+    // Close the file handle (for /ram/logs/reboot.txt)
     OS_close(fd);
 }
-

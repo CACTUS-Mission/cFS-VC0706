@@ -203,6 +203,7 @@ void setMotionDetect(Camera_t *cam, int flag)
  */
 char *takePicture(Camera_t *cam, char *file_path)
 {
+    // Reset the frame pointer
     cam->frameptr = 0;
     // Enable LED
     led_on(&led);     // initialized in vc0706_device.c
@@ -226,8 +227,6 @@ char *takePicture(Camera_t *cam, char *file_path)
         return "";
     }
 
-    //OS_printf("VC0706_core::takePicture() retrieving FBUFF_LEN...\n");
-
     serialPutchar(cam->fd, (char)COMMAND_BEGIN);
     serialPutchar(cam->fd, (char)cam->serialNum);
     serialPutchar(cam->fd, (char)GET_FBUF_LEN);
@@ -243,8 +242,7 @@ char *takePicture(Camera_t *cam, char *file_path)
     // Wait for picture data to be available for reading
     while (serialDataAvail(cam->fd) <= 0);
 
-    //OS_printf("Serial Data Avail %d \n", serialDataAvail(cam->fd));
-
+    // Retrieve the image's length from the camera
     unsigned int len;
     len = serialGetchar(cam->fd);
     len <<= 8;
@@ -254,8 +252,7 @@ char *takePicture(Camera_t *cam, char *file_path)
     len <<= 8;
     len |= serialGetchar(cam->fd);
 
-    //OS_printf("Length %u \n", len);
-
+    // If the image is too large, reset the camera and run this function again
     if (len > 20000)
     {
         CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR, "Camera %d  image too large. Length [%u] Expected <= 20000", cam->ttyInterface, len);
@@ -263,12 +260,11 @@ char *takePicture(Camera_t *cam, char *file_path)
         clearBuffer(cam);
         return takePicture(cam, file_path);
     }
-    //char image[len];
-    char *image = malloc(len + 1);
-    //image[len+1] = NULL;
-
+    // Initialize the array to read the image into
+    char image[len + 1];
     int imgIndex = 0;
 
+    // May have to read the entire buffer multiple times, so we'll have to loop
     while (len > 0)
     {
         unsigned int readBytes = len;
@@ -301,7 +297,7 @@ char *takePicture(Camera_t *cam, char *file_path)
         int avail = 0;
         int timeout = 20 * TO_SCALE;
 
-        while ((timeout != counter) && cam->bufferLen < readBytes)
+        while ((timeout < counter) && cam->bufferLen < readBytes)
         {
             avail = serialDataAvail(cam->fd);
 

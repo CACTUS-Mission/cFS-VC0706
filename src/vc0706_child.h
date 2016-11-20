@@ -51,7 +51,7 @@ extern uint32                VC0706_ChildTaskID;
 **
 **  \sa #VC0706_AppInit
 **/
-int32 VC0706_ChildInit(void);
+int VC0706_ChildInit();
 
 
 /**
@@ -75,7 +75,7 @@ int32 VC0706_ChildInit(void);
 **
 **  \sa #CFE_ES_DeleteChildTask, #FM_ChildLoop
 **/
-void VC0706_ChildTask(void);
+void VC0706_ChildTask();
 
 
 /**

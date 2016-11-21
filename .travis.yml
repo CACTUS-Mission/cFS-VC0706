@@ -43,7 +43,7 @@ after_success:
 - cd $CFS_MISSION/..
 # reset to original state
 - rm -rf cFE
-- git reset --hard origin/master
+- git reset --hard origin/$TRAVIS_BRANCH
 # generate documentation and move it out of the way
 - doxygen Doxyfile
 - mv docs/ ..

@@ -1,2 +1,3 @@
 # Ignore Visual Studio Code workspace settings
 .vscode/
+travis_id_rsa

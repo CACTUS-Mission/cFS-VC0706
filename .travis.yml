@@ -1,36 +1,58 @@
 language: c
-# Install apt dependencies
 addons:
-    apt:
-        packages:
-            - gcc-multilib
-            - gcc-arm-linux-gnueabihf
-            - g++-arm-linux-gnueabihf
-# Set the app name for later in this script
+  apt:
+    packages:
+    - gcc-multilib
+    - gcc-arm-linux-gnueabihf
+    - g++-arm-linux-gnueabihf
+    - doxygen
 before_install:
- - export CFS_APP_NAME=vc0706
+- openssl aes-256-cbc -K $encrypted_b9c0a2f05e07_key -iv $encrypted_b9c0a2f05e07_iv
+  -in travis_id_rsa.enc -out travis_id_rsa -d
+# Set the app name for later in this script
+- export CFS_APP_NAME=vc0706
 # Don't edit this section (install). It should be the same for all cFS apps. -Ezra
 install:
- - git clone https://github.com/CACTUS-Mission/cFE.git
- - mkdir cFE/apps/$CFS_APP_NAME cFE/apps/$CFS_APP_NAME/fsw
- - rm -rf cFE/osal/
- - wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
- - tar -xf osal-4.2.1a-release.tar.gz
- - mv osal-4.2.1a-release cFE/osal
+- git clone https://github.com/CACTUS-Mission/cFE.git
+- mkdir cFE/apps/$CFS_APP_NAME cFE/apps/$CFS_APP_NAME/fsw
+- rm -rf cFE/osal/
+- wget http://downloads.sourceforge.net/project/osal/osal-4.2.1a-release.tar.gz
+- tar -xf osal-4.2.1a-release.tar.gz
+- mv osal-4.2.1a-release cFE/osal
 # Pull WiringPi and move it into the cFE library includes folder
 before_script:
- - git clone https://github.com/CACTUS-Mission/WiringPi.git
- - mv WiringPi/wiringPi/* cFE/apps/inc
+- git clone https://github.com/CACTUS-Mission/WiringPi.git
+- mv WiringPi/wiringPi/* cFE/apps/inc
 # Don't edit this section (script). It should be the same for all cFS apps. -Ezra
 script:
- - mv for_build cFE/apps/$CFS_APP_NAME/fsw
- - mv mission_inc cFE/apps/$CFS_APP_NAME/fsw
- - mv platform_inc cFE/apps/$CFS_APP_NAME/fsw
- - mv src cFE/apps/$CFS_APP_NAME/fsw
- - cd cFE
- - source setvars.sh
- - cd $CFS_MISSION/build/cpu1
- - export THE_APPS=$CFS_APP_NAME
- - make clean
- - make config
- - make
+- cp -r for_build cFE/apps/$CFS_APP_NAME/fsw
+- cp -r mission_inc cFE/apps/$CFS_APP_NAME/fsw
+- cp -r platform_inc cFE/apps/$CFS_APP_NAME/fsw
+- cp -r src cFE/apps/$CFS_APP_NAME/fsw
+- cd cFE
+- source setvars.sh
+- cd $CFS_MISSION/build/cpu1
+- export THE_APPS=$CFS_APP_NAME
+- make clean
+- make config
+- make
+deploy:
+  skip-cleanup: true
+after-success:
+# go to original directory
+- cd $CFS_MISSION/..
+# reset to original state
+- git reset --hard origin/master
+# generate documentation and move it out of the way
+- doxygen Doxyfile
+- mv docs/ ..
+# Add SSH key
+- eval "$(ssh-agent -s)"
+- chmod 600 travis_id_rsa
+- ssh-add travis_id_rsa
+# Switch branch to gh-pages, copy docs into it, and push
+- git checkout gh-pages
+- mv ../docs/html/* .
+- git commit -a -m "Update documentation from Travis"
+# Only push if we're updating docs from the master branch
+- test "$TRAVIS_BRANCH" == 'master' && (git push)

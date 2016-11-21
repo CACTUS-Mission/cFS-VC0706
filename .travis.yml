@@ -25,10 +25,10 @@ before_script:
 - mv WiringPi/wiringPi/* cFE/apps/inc
 # Don't edit this section (script). It should be the same for all cFS apps. -Ezra
 script:
-- cp for_build cFE/apps/$CFS_APP_NAME/fsw
-- cp mission_inc cFE/apps/$CFS_APP_NAME/fsw
-- cp platform_inc cFE/apps/$CFS_APP_NAME/fsw
-- cp src cFE/apps/$CFS_APP_NAME/fsw
+- cp -r for_build cFE/apps/$CFS_APP_NAME/fsw
+- cp -r mission_inc cFE/apps/$CFS_APP_NAME/fsw
+- cp -r platform_inc cFE/apps/$CFS_APP_NAME/fsw
+- cp -r src cFE/apps/$CFS_APP_NAME/fsw
 - cd cFE
 - source setvars.sh
 - cd $CFS_MISSION/build/cpu1

@@ -36,6 +36,8 @@ script:
 - make clean
 - make config
 - make
+deploy:
+  skip-cleanup: true
 after-success:
 # go to original directory
 - cd $CFS_MISSION/..

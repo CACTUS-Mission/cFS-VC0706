@@ -7,25 +7,6 @@
 #define _vc0706_core_h_
 
 #include "vc0706.h"
-/*
-#include <time.h>
-#include <errno.h>
-#include <stdbool.h>
-
-#include <stdint.h>
-#include <stdlib.h>
-
-// Brian's DEPS
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include <wiringSerial.h>
-#include <wiringPi.h>
-*/
 
 // Brian's Defines
 #define BAUD 38400

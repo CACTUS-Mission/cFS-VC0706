@@ -23,6 +23,7 @@ install:
 before_script:
 - git clone https://github.com/CACTUS-Mission/WiringPi.git
 - mv WiringPi/wiringPi/* cFE/apps/inc
+- rm -rf WiringPi
 # Don't edit this section (script). It should be the same for all cFS apps. -Ezra
 script:
 - cp -r for_build cFE/apps/$CFS_APP_NAME/fsw
@@ -36,12 +37,11 @@ script:
 - make clean
 - make config
 - make
-deploy:
-  skip-cleanup: true
-after-success:
+after_success:
 # go to original directory
 - cd $CFS_MISSION/..
 # reset to original state
+- rm -rf cFE
 - git reset --hard origin/master
 # generate documentation and move it out of the way
 - doxygen Doxyfile
@@ -51,8 +51,13 @@ after-success:
 - chmod 600 travis_id_rsa
 - ssh-add travis_id_rsa
 # Switch branch to gh-pages, copy docs into it, and push
-- git checkout gh-pages
-- mv ../docs/html/* .
-- git commit -a -m "Update documentation from Travis"
+- git remote set-url origin git@github.com:$TRAVIS_REPO_SLUG
+# Travis only checks out master by default. Add gh-pages to the remote
+- git remote set-branches --add origin gh-pages
+- git fetch --all
+- git checkout -b gh-pages origin/gh-pages
+- mv -f ../docs/html/* .
+- git add .
+- git -c user.name='Travis CI' -c user.email='travis' commit -a -m "Update documentation from Travis"
 # Only push if we're updating docs from the master branch
 - test "$TRAVIS_BRANCH" == 'master' && (git push)

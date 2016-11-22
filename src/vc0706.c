@@ -5,62 +5,33 @@
 **   This file contains the source code for the VC0706 App.
 **
 *******************************************************************************/
-
-/*
-**   Include Files:
-*/
-
-#include "vc0706.h" // Main Header
-
-//#include "vc0706_core.h" // Main camera struct and functions"
-
-//#include "vc0706_perfids.h"
-//#include "vc0706_msgids.h"
-//#include "vc0706_msg.h"
-//#include "vc0706_events.h"
-//#include "vc0706_version.h"
+#include "vc0706.h"
 #include "vc0706_child.h"
 
+vc0706_hk_tlm_t VC0706_HkTelemetryPkt;     /**< The housekeeping telemetry packet for this app */
+CFE_SB_PipeId_t VC0706_CommandPipe;        /**< The software bus command pipe for this app */
+CFE_SB_MsgPtr_t VC0706MsgPtr;              /**< Used to store a pointer to a message received over the software bus */
+uint32 VC0706_ChildTaskID;                 /**< The task ID for VC0706_ChildTask */
+VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt; /**< Struct to store image command for VC0706_SendTimFileName */
+led_t led;                                 /**< Represents the LED flash for the camera */
+Camera_t cam;                              /**< Represents one of the two cameras */
+// TODO: Implement second camera
 
-/*
-** global data
-*/
-vc0706_hk_tlm_t    VC0706_HkTelemetryPkt;
-CFE_SB_PipeId_t    VC0706_CommandPipe;
-CFE_SB_MsgPtr_t    VC0706MsgPtr;
+static CFE_EVS_BinFilter_t VC0706_EventFilters[] =
+    {
+        /* Event ID    mask */
+        {VC0706_STARTUP_INF_EID, 0x0000},
+        {VC0706_COMMAND_ERR_EID, 0x0000},
+        {VC0706_COMMANDNOP_INF_EID, 0x0000},
+        {VC0706_COMMANDRST_INF_EID, 0x0000},
+};
 
-uint32             VC0706_ChildTaskID;
-
-/*
-** Global command struct for VC0706_SendTimFileName()
-*/
-VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt;
-
-/*
-** LED struct - used to control LEDs as camera flash in vc0706_core.c takePicture()
-*/
-led_t led;
-
-/*
-** Main Camera struct
-*/
-Camera_t cam;
-
-static CFE_EVS_BinFilter_t  VC0706_EventFilters[] =
-       {  /* Event ID    mask */
-          {VC0706_STARTUP_INF_EID,       0x0000},
-          {VC0706_COMMAND_ERR_EID,       0x0000},
-          {VC0706_COMMANDNOP_INF_EID,    0x0000},
-          {VC0706_COMMANDRST_INF_EID,    0x0000},
-       };
-
-/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* VC0706_AppMain() -- Application entry point and main process loop          */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
-void VC0706_AppMain( void )
+/**
+ * The main entry point for this application
+ */
+void VC0706_AppMain()
 {
-    int32  status;
+    int32 status;
     uint32 RunStatus = CFE_ES_APP_RUN;
 
     CFE_ES_PerfLogEntry(VC0706_PERF_ID);
@@ -83,37 +54,26 @@ void VC0706_AppMain( void )
         {
             VC0706_ProcessCommandPacket();
         }
-
     }
 
     CFE_ES_ExitApp(RunStatus);
+}
 
-} /* End of VC0706_AppMain() */
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */
-/*                                                                            */
-/* VC0706_AppInit() --  initialization                                       */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void VC0706_AppInit(void)
+/**
+ * Application setup. Runs once upon initialization of this application
+ */
+void VC0706_AppInit()
 {
-    /*
-    ** Register the app with Executive services
-    */
-    CFE_ES_RegisterApp() ;
+    // Register the app with Executive services
+    CFE_ES_RegisterApp();
 
-    /*
-    ** Register the events
-    */
+    // Register the events
     CFE_EVS_Register(VC0706_EventFilters,
-                     sizeof(VC0706_EventFilters)/sizeof(CFE_EVS_BinFilter_t),
+                     sizeof(VC0706_EventFilters) / sizeof(CFE_EVS_BinFilter_t),
                      CFE_EVS_BINARY_FILTER);
 
-    /*
-    ** Create the Software Bus command pipe and subscribe to housekeeping
-    **  messages
-    */
-    CFE_SB_CreatePipe(&VC0706_CommandPipe, VC0706_PIPE_DEPTH,"VC0706_CMD_PIPE");
+    // Create the Software Bus command pipe and subscribe to housekeeping messages
+    CFE_SB_CreatePipe(&VC0706_CommandPipe, VC0706_PIPE_DEPTH, "VC0706_CMD_PIPE");
     CFE_SB_Subscribe(VC0706_CMD_MID, VC0706_CommandPipe);
     CFE_SB_Subscribe(VC0706_SEND_HK_MID, VC0706_CommandPipe);
 
@@ -125,14 +85,13 @@ void VC0706_AppInit(void)
                    VC0706_HK_TLM_MID,
                    VC0706_HK_TLM_LNGTH, TRUE);
 
-    CFE_EVS_SendEvent (VC0706_STARTUP_INF_EID, CFE_EVS_INFORMATION,
-               "VC0706 App Initialized. Version %d.%d.%d.%d",
-                VC0706_MAJOR_VERSION,
-                VC0706_MINOR_VERSION, 
-                VC0706_REVISION, 
-                VC0706_MISSION_REV);
-				
-} /* End of VC0706_AppInit() */
+    CFE_EVS_SendEvent(VC0706_STARTUP_INF_EID, CFE_EVS_INFORMATION,
+                      "VC0706 App Initialized. Version %d.%d.%d.%d",
+                      VC0706_MAJOR_VERSION,
+                      VC0706_MINOR_VERSION,
+                      VC0706_REVISION,
+                      VC0706_MISSION_REV);
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*  Name:  VC0706_ProcessCommandPacket                                        */
@@ -144,25 +103,25 @@ void VC0706_AppInit(void)
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 void VC0706_ProcessCommandPacket(void)
 {
-    CFE_SB_MsgId_t  MsgId;
+    CFE_SB_MsgId_t MsgId;
 
     MsgId = CFE_SB_GetMsgId(VC0706MsgPtr);
 
     switch (MsgId)
     {
-        case VC0706_CMD_MID:
-            VC0706_ProcessGroundCommand();
-            break;
+    case VC0706_CMD_MID:
+        VC0706_ProcessGroundCommand();
+        break;
 
-        case VC0706_SEND_HK_MID:
-            VC0706_ReportHousekeeping();
-            break;
+    case VC0706_SEND_HK_MID:
+        VC0706_ReportHousekeeping();
+        break;
 
-        default:
-            VC0706_HkTelemetryPkt.vc0706_command_error_count++;
-            CFE_EVS_SendEvent(VC0706_COMMAND_ERR_EID,CFE_EVS_ERROR,
-			"VC0706: invalid command packet,MID = 0x%x", MsgId);
-            break;
+    default:
+        VC0706_HkTelemetryPkt.vc0706_command_error_count++;
+        CFE_EVS_SendEvent(VC0706_COMMAND_ERR_EID, CFE_EVS_ERROR,
+                          "VC0706: invalid command packet,MID = 0x%x", MsgId);
+        break;
     }
 
     return;
@@ -184,19 +143,19 @@ void VC0706_ProcessGroundCommand(void)
     /* Process "known" VC0706 app ground commands */
     switch (CommandCode)
     {
-        case VC0706_NOOP_CC:
-            VC0706_HkTelemetryPkt.vc0706_command_count++;
-            CFE_EVS_SendEvent(VC0706_COMMANDNOP_INF_EID,CFE_EVS_INFORMATION,
-			"VC0706: NOOP command");
-            break;
+    case VC0706_NOOP_CC:
+        VC0706_HkTelemetryPkt.vc0706_command_count++;
+        CFE_EVS_SendEvent(VC0706_COMMANDNOP_INF_EID, CFE_EVS_INFORMATION,
+                          "VC0706: NOOP command");
+        break;
 
-        case VC0706_RESET_COUNTERS_CC:
-            VC0706_ResetCounters();
-            break;
+    case VC0706_RESET_COUNTERS_CC:
+        VC0706_ResetCounters();
+        break;
 
-        /* default case already found during FC vs length test */
-        default:
-            break;
+    /* default case already found during FC vs length test */
+    default:
+        break;
     }
     return;
 
@@ -213,8 +172,8 @@ void VC0706_ProcessGroundCommand(void)
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 void VC0706_ReportHousekeeping(void)
 {
-    CFE_SB_TimeStampMsg((CFE_SB_Msg_t *) &VC0706_HkTelemetryPkt);
-    CFE_SB_SendMsg((CFE_SB_Msg_t *) &VC0706_HkTelemetryPkt);
+    CFE_SB_TimeStampMsg((CFE_SB_Msg_t *)&VC0706_HkTelemetryPkt);
+    CFE_SB_SendMsg((CFE_SB_Msg_t *)&VC0706_HkTelemetryPkt);
     return;
 
 } /* End of VC0706_ReportHousekeeping() */
@@ -230,11 +189,11 @@ void VC0706_ReportHousekeeping(void)
 void VC0706_ResetCounters(void)
 {
     /* Status of commands processed by the VC0706 App */
-    VC0706_HkTelemetryPkt.vc0706_command_count       = 0;
+    VC0706_HkTelemetryPkt.vc0706_command_count = 0;
     VC0706_HkTelemetryPkt.vc0706_command_error_count = 0;
 
     CFE_EVS_SendEvent(VC0706_COMMANDRST_INF_EID, CFE_EVS_INFORMATION,
-		"VC0706: RESET command");
+                      "VC0706: RESET command");
     return;
 
 } /* End of VC0706_ResetCounters() */
@@ -255,17 +214,16 @@ boolean VC0706_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
     */
     if (ExpectedLength != ActualLength)
     {
-        CFE_SB_MsgId_t MessageID   = CFE_SB_GetMsgId(msg);
-        uint16         CommandCode = CFE_SB_GetCmdCode(msg);
+        CFE_SB_MsgId_t MessageID = CFE_SB_GetMsgId(msg);
+        uint16 CommandCode = CFE_SB_GetCmdCode(msg);
 
         CFE_EVS_SendEvent(VC0706_LEN_ERR_EID, CFE_EVS_ERROR,
-           "Invalid msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
-              MessageID, CommandCode, ActualLength, ExpectedLength);
+                          "Invalid msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
+                          MessageID, CommandCode, ActualLength, ExpectedLength);
         result = FALSE;
         VC0706_HkTelemetryPkt.vc0706_command_error_count++;
     }
 
-    return(result);
+    return (result);
 
 } /* End of VC0706_VerifyCmdLength() */
-

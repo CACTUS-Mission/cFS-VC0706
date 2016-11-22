@@ -1,5 +1,3 @@
-
-
 #ifndef _vc0706_child_h_
 #define _vc0706_child_h_
 
@@ -8,29 +6,10 @@
 */
 #include "vc0706.h"
 
-/*
-** Platform Required header files
-*/
-/*
-#include <stdio.h>   // Standard input/output definitions 
-#include <fcntl.h>   // File control definitions 
-#include <termios.h> // POSIX terminal control definitions 
-#include <stdlib.h>
-#include <linux/i2c-dev.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-*/
-
-/* Check necessity of each of these to trim fat */
+//TODO: Check necessity of each of these to trim fat
 
 extern vc0706_hk_tlm_t       VC0706_HkTelemetryPkt;
 extern uint32                VC0706_ChildTaskID;
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* VC0706 child task global function prototypes                   */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
 **  \brief Child Task Initialization Function
@@ -51,8 +30,7 @@ extern uint32                VC0706_ChildTaskID;
 **
 **  \sa #VC0706_AppInit
 **/
-int32 VC0706_ChildInit(void);
-
+int VC0706_ChildInit();
 
 /**
 **  \brief Child Task Entry Point Function
@@ -75,8 +53,7 @@ int32 VC0706_ChildInit(void);
 **
 **  \sa #CFE_ES_DeleteChildTask, #FM_ChildLoop
 **/
-void VC0706_ChildTask(void);
-
+void VC0706_ChildTask();
 
 /**
 **  \brief Child Task Main Loop Processor Function
@@ -94,21 +71,14 @@ void VC0706_ChildTask(void);
 **/
 void VC0706_ChildLoop(void);
 
-
 /*
 ** Sending file name info to TIM app
 */
 int VC0706_SendTimFileName(char *file_name);
-
 
 /*
 ** Get the number of reboots in the system
 */
 void setNumReboots(void);
 
-#endif /* _vc0706_child_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
-
+#endif

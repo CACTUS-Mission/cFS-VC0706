@@ -2,35 +2,19 @@
  * Retrieved from https://github.com/vyykn/VC0706
  *
  * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission
+ * Edited by Ezra Brooks for use on TRAPSat aboard the CACTUS-1 Mission
  */
 #ifndef _vc0706_core_h_
 #define _vc0706_core_h_
 
 #include "vc0706.h"
-/*
-#include <time.h>
-#include <errno.h>
-#include <stdbool.h>
-
-#include <stdint.h>
-#include <stdlib.h>
-
-// Brian's DEPS
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include <wiringSerial.h>
-#include <wiringPi.h>
-*/
 
 // Brian's Defines
 #define BAUD 38400
 
+#define SERIAL_NUMBER 0x00
 #define COMMAND_BEGIN 0x56
+#define COMMAND_SUCCESS 0x76
 #define RESET 0x26
 #define GEN_VERSION 0x11
 #define READ_FBUF 0x32
@@ -68,19 +52,20 @@
 #define CAMERADELAY 10
 #define TO_SCALE 1
 #define TO_U 200000
-//#define TO_U 1000000
 
+/**
+ * Represents a VC0706 camera attached via serial
+ */
 typedef struct Camera_t {
-    int motion;
-    bool ready;
-    int ttyInterface;
-    int fd;
+    bool motion; /**< Whether or not motion detection is enabled */
+    bool ready; /**< Whether or not the serial interface has been initialized */
+    int ttyInterface; /**< The ID of the tty interface. i.e. 0 for /dev/ttyAMA0 */
+    int fd; /**< The handle for the serial connection */
 
-    int frameptr;
-    int bufferLen;
-    int serialNum;
-    char serialHeader[5];
-    char imageName[OS_MAX_PATH_LEN]; // cFS defined
+    int frameptr; /**< Points to the next frame in the buffer during large read operations */
+    int bufferLen; /**< Length of the camera's buffer */
+    int serialNum; /**< Serial number of the camera. Used for sending commands */
+    char imageName[OS_MAX_PATH_LEN]; /**< Name of the saved image. Uses OSAL's max path length macro to define its length */
 } Camera_t;
 
 
@@ -90,7 +75,7 @@ void clearBuffer(Camera_t *cam);
 void reset(Camera_t *cam);
 void resumeVideo(Camera_t *cam);
 int  getVersion(Camera_t *cam);
-void setMotionDetect(Camera_t *cam, int flag);
+void setMotionDetect(Camera_t *cam, bool flag);
 char * takePicture(Camera_t *cam, char * file_path);
 
-#endif /* _vc0706_core_h__ */
+#endif

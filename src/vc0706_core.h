@@ -2,6 +2,7 @@
  * Retrieved from https://github.com/vyykn/VC0706
  *
  * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission
+ * Edited by Ezra Brooks for use on TRAPSat aboard the CACTUS-1 Mission
  */
 #ifndef _vc0706_core_h_
 #define _vc0706_core_h_
@@ -11,7 +12,9 @@
 // Brian's Defines
 #define BAUD 38400
 
+#define SERIAL_NUMBER 0x00
 #define COMMAND_BEGIN 0x56
+#define COMMAND_SUCCESS 0x76
 #define RESET 0x26
 #define GEN_VERSION 0x11
 #define READ_FBUF 0x32
@@ -49,8 +52,10 @@
 #define CAMERADELAY 10
 #define TO_SCALE 1
 #define TO_U 200000
-//#define TO_U 1000000
 
+/**
+ * Represents a VC0706 camera attached via serial
+ */
 typedef struct Camera_t {
     int motion;
     bool ready;
@@ -71,7 +76,7 @@ void clearBuffer(Camera_t *cam);
 void reset(Camera_t *cam);
 void resumeVideo(Camera_t *cam);
 int  getVersion(Camera_t *cam);
-void setMotionDetect(Camera_t *cam, int flag);
+void setMotionDetect(Camera_t *cam, bool flag);
 char * takePicture(Camera_t *cam, char * file_path);
 
-#endif /* _vc0706_core_h__ */
+#endif

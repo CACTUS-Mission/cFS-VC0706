@@ -58,9 +58,9 @@ int init(Camera_t *cam, uint8 ttyInterface)
  * \param size - The maximum message size to read.
  * \param readTimeout - The maximum attempts between successful reads
  */
-char* readCamera(Camera_t *cam, int size, const int readTimeout)
+char *readCamera(Camera_t *cam, int size, const int readTimeout)
 {
-    char reply[size];   /**< Buffer to read the camera's reply into */
+    char reply[size];  /**< Buffer to read the camera's reply into */
     int try_count = 0; /**< Failed read attempt count. Used to drop out of loop if camera fails. */
     int length = 0;    /**< Length of the reply that has been received so far */
 
@@ -95,9 +95,9 @@ bool checkReply(Camera_t *cam, int cmd, int size)
 {
     // Timeout between serial reads. TO_SCALE is a setting in vc0706_core.h to modify all timeouts at once.
     int timeout = 3 * TO_SCALE;
-    char* reply = readCamera(cam, size, timeout);
+    char *reply = readCamera(cam, size, timeout);
     // Check if the reply is valid
-    bool replyValidity = reply[0] == 0x76 && reply[1] == 0x00 && reply[2] == cmd;
+    bool replyValidity = reply[0] == COMMAND_SUCCESS && reply[1] == cam->serialNum && reply[2] == cmd;
     if (!replyValidity)
         CFE_EVS_SendEvent(VC0706_REPLY_ERR_EID, CFE_EVS_ERROR, "Camera %d unresponsive! R[0] = [%x] R[1] = [%x] R[2] = [%x]", cam->ttyInterface, reply[0], reply[1], reply[2]);
     // Return the reply's validity as the execution status of this function
@@ -125,11 +125,9 @@ void clearBuffer(Camera_t *cam)
  */
 void reset(Camera_t *cam)
 {
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    // Issue the camera reset command over serial
-    serialPutchar(cam->fd, (char)RESET);
-    serialPutchar(cam->fd, (char)0x00);
+    // Reset the camera
+    uint8_t resetCommandArgs[] = {0x00};
+    sendCommand(cam, RESET, resetCommandArgs, sizeof(resetCommandArgs));
 
     if (!checkReply(cam, RESET, 5))
         OS_printf("reset() Check Reply Status: %s\n", strerror(errno));
@@ -142,11 +140,9 @@ void reset(Camera_t *cam)
  */
 void resumeVideo(Camera_t *cam)
 {
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    serialPutchar(cam->fd, (char)FBUF_CTRL);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)RESUMEFRAME);
+    // Use frame buffer control (FBUF_CTRL) to resume video on the camera
+    uint8_t frameBufferControlArgs[] = {0x01, RESUMEFRAME};
+    sendCommand(cam, FBUF_CTRL, frameBufferControlArgs, sizeof(frameBufferControlArgs));
 
     if (!checkReply(cam, FBUF_CTRL, 5))
         OS_printf("Camera did not resume\n");
@@ -158,16 +154,17 @@ void resumeVideo(Camera_t *cam)
  */
 int getVersion(Camera_t *cam)
 {
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    serialPutchar(cam->fd, (char)GEN_VERSION);
-    serialPutchar(cam->fd, (char)0x00);
+    // Check the version of the camera
+    uint8_t genVersionArgs[] = {0x00};
+    sendCommand(cam, GEN_VERSION, genVersionArgs, sizeof(genVersionArgs));
 
     if (!checkReply(cam, GEN_VERSION, 5))
     {
         //OS_printf("CAMERA NOT FOUND!!!\n");
         return -1;
-    } else {
+    }
+    else
+    {
         return 0;
     }
 }
@@ -175,25 +172,37 @@ int getVersion(Camera_t *cam)
 /**
  * Enables or disables motion detection on the specified camera
  * \param cam - A pointer to the camera to set the motion detection flag on
+ * \param flag - Enable (1) or disable (0) motion detection.
  */
-void setMotionDetect(Camera_t *cam, int flag)
+void setMotionDetect(Camera_t *cam, bool flag)
 {
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)0x00);
-    serialPutchar(cam->fd, (char)0x42);
-    serialPutchar(cam->fd, (char)0x04);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)0x00);
-    serialPutchar(cam->fd, (char)0x00);
+    // Enable motion detection on the camera
+    uint8_t motionControlArgs[] = {0x04, 0x01, 0x01, 0x00, 0x00};
+    sendCommand(cam, MOTION_CTRL, motionControlArgs, sizeof(motionControlArgs));
 
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    serialPutchar(cam->fd, (char)COMM_MOTION_CTRL);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)flag);
+    // Enable motion detection communication - makes the camera send a motion detection alert over serial when appropriate.
+    uint8_t commMotionControlArgs[] = {0x01, (uint8_t)flag};
+    sendCommand(cam, COMM_MOTION_CTRL, commMotionControlArgs, sizeof(commMotionControlArgs));
 
     clearBuffer(cam);
+}
+
+/**
+ * Sends a command over serial to the specified camera.
+ * \param cam - A pointer to the camera to command
+ * \param args - An array of the codes to write to the interface
+ * \param argLen - The length of the array
+ */
+void sendCommand(Camera_t *cam, uint8_t cmd, uint8_t args[], uint8_t argLen)
+{
+    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
+    serialPutchar(cam->fd, (char)cam->serialNum);
+    serialPutchar(cam->fd, (char)cmd);
+    uint8_t i;
+    for (i = 0; i < argLen; i++)
+    {
+        serialPutchar(cam->fd, (char)args[i]);
+    }
 }
 
 /**
@@ -212,11 +221,9 @@ char *takePicture(Camera_t *cam, char *file_path)
     // Clear Buffer
     clearBuffer(cam);
 
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    serialPutchar(cam->fd, (char)FBUF_CTRL);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)STOPCURRENTFRAME); // Hold the current frame -- this essentially takes the picture
+    // Tell the camera to hold the current frame (holds it in memory on the camera board so we can retrieve it)
+    uint8_t frameBufferControlArgs[] = {0x01, STOPCURRENTFRAME};
+    sendCommand(cam, FBUF_CTRL, frameBufferControlArgs, sizeof(frameBufferControlArgs));
 
     // Disable LED
     led_off(&led);
@@ -227,11 +234,8 @@ char *takePicture(Camera_t *cam, char *file_path)
         return "";
     }
 
-    serialPutchar(cam->fd, (char)COMMAND_BEGIN);
-    serialPutchar(cam->fd, (char)cam->serialNum);
-    serialPutchar(cam->fd, (char)GET_FBUF_LEN);
-    serialPutchar(cam->fd, (char)0x01);
-    serialPutchar(cam->fd, (char)0x00);
+    uint8_t getFrameBufferLengthArgs[] = {0x01, 0x00};
+    sendCommand(cam, GET_FBUF_LEN, getFrameBufferLengthArgs, sizeof(getFrameBufferLengthArgs));
 
     if (!checkReply(cam, GET_FBUF_LEN, 5))
     {
@@ -268,7 +272,7 @@ char *takePicture(Camera_t *cam, char *file_path)
     while (len > 0)
     {
         unsigned int readBytes = len;
-
+        // TODO: figure out how to refactor this into something friendlier to readers
         serialPutchar(cam->fd, (char)COMMAND_BEGIN);
         serialPutchar(cam->fd, (char)cam->serialNum);
         serialPutchar(cam->fd, (char)READ_FBUF);

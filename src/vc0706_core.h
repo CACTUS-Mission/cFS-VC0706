@@ -65,7 +65,7 @@ typedef struct Camera_t {
     int frameptr; /**< Points to the next frame in the buffer during large read operations */
     int bufferLen; /**< Length of the camera's buffer */
     int serialNum; /**< Serial number of the camera. Used for sending commands */
-    char imageName[OS_MAX_PATH_LEN]; // cFS defined
+    char imageName[OS_MAX_PATH_LEN]; /**< Name of the saved image. Uses OSAL's max path length macro to define its length */
 } Camera_t;
 
 

@@ -15,7 +15,9 @@
 
 #include "vc0706.h"
 
-
+/**
+ * An LED connected to the Raspberry Pi via GPIO. Used as a camera flash
+ */
 typedef struct led_t {
 	int led_pin; 	/**< The GPIO pin this LED is attached to */
 	bool led_status;	/**< Whether the LED is on or not */

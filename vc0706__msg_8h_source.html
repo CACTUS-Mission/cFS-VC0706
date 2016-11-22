@@ -113,60 +113,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00015"></a>00015 <span class="comment">/*</span>
 <a name="l00016"></a>00016 <span class="comment">** VC0706 App command codes</span>
 <a name="l00017"></a>00017 <span class="comment">*/</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#define VC0706_NOOP_CC                 0</span>
-<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define VC0706_RESET_COUNTERS_CC       1</span>
+<a name="l00018"></a>00018 <span class="preprocessor">#define VC0706_NOOP_CC 0</span>
+<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define VC0706_RESET_COUNTERS_CC 1</span>
 <a name="l00020"></a>00020 <span class="preprocessor"></span>
-<a name="l00021"></a>00021 <span class="comment">/*************************************************************************/</span>
-<a name="l00022"></a>00022 <span class="comment">/*</span>
-<a name="l00023"></a>00023 <span class="comment">** Type definition (generic &quot;no arguments&quot; command)</span>
-<a name="l00024"></a>00024 <span class="comment">*/</span>
-<a name="l00025"></a><a class="code" href="struct_v_c0706___no_args_cmd__t.html">00025</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
-<a name="l00026"></a>00026 {
-<a name="l00027"></a>00027    uint8    CmdHeader[CFE_SB_CMD_HDR_SIZE];
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 } <a class="code" href="struct_v_c0706___no_args_cmd__t.html">VC0706_NoArgsCmd_t</a>;
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="comment">/*************************************************************************/</span>
-<a name="l00032"></a>00032 <span class="comment">/*</span>
-<a name="l00033"></a>00033 <span class="comment">** Type definition (VC0706 App housekeeping)</span>
-<a name="l00034"></a>00034 <span class="comment">*/</span>
-<a name="l00035"></a><a class="code" href="struct_o_s___p_a_c_k.html">00035</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037     uint8              TlmHeader[CFE_SB_TLM_HDR_SIZE];
-<a name="l00038"></a>00038     uint8              vc0706_command_error_count;
-<a name="l00039"></a>00039     uint8              vc0706_command_count;
-<a name="l00040"></a>00040     <span class="keywordtype">char</span>               vc0706_filename[VC0706_MAX_FILENAME_LEN];
+<a name="l00024"></a><a class="code" href="struct_v_c0706___no_args_cmd__t.html">00024</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00025"></a>00025 {
+<a name="l00026"></a><a class="code" href="struct_v_c0706___no_args_cmd__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">00026</a>     uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE]; 
+<a name="l00028"></a>00028 } <a class="code" href="struct_v_c0706___no_args_cmd__t.html">VC0706_NoArgsCmd_t</a>;
+<a name="l00029"></a>00029 
+<a name="l00033"></a><a class="code" href="struct_o_s___p_a_c_k.html">00033</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00034"></a>00034 {
+<a name="l00035"></a><a class="code" href="struct_o_s___p_a_c_k.html#a1220357b1bf83711d1f76f0fed082a89">00035</a>     uint8 TlmHeader[CFE_SB_TLM_HDR_SIZE];          
+<a name="l00036"></a><a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">00036</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">vc0706_command_error_count</a>;              
+<a name="l00037"></a><a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">00037</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">vc0706_command_count</a>;                    
+<a name="l00038"></a><a class="code" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">00038</a>     <span class="keywordtype">char</span> vc0706_filename[VC0706_MAX_FILENAME_LEN]; 
+<a name="l00040"></a>00040 } <a class="code" href="struct_o_s___p_a_c_k.html">OS_PACK</a> vc0706_hk_tlm_t;
 <a name="l00041"></a>00041 
-<a name="l00042"></a>00042 }   <a class="code" href="struct_o_s___p_a_c_k.html">OS_PACK</a> vc0706_hk_tlm_t  ;
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 <span class="preprocessor">#define VC0706_HK_TLM_LNGTH   sizeof ( vc0706_hk_tlm_t )</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span>
-<a name="l00046"></a>00046 <span class="comment">/*************************************************************************/</span>
-<a name="l00047"></a>00047 <span class="comment">/*</span>
-<a name="l00048"></a>00048 <span class="comment">** Definitions redundantly copied from TIM</span>
-<a name="l00049"></a>00049 <span class="comment">** quick and dirty method of sharing this info</span>
-<a name="l00050"></a>00050 <span class="comment">*/</span>
-<a name="l00051"></a>00051 <span class="preprocessor">#define VC0706_IMAGE_CMD_MID           0x188A </span><span class="comment">/* This should be == TIM_APP_CMD_MID */</span>
-<a name="l00052"></a>00052 <span class="preprocessor">#define VC0706_IMAGE0_CMD_CODE          3      </span><span class="comment">/* This should be == TIM_APP_SEND_IMAGE0_CC */</span>
-<a name="l00053"></a>00053 <span class="preprocessor">#define VC0706_IMAGE1_CMD_CODE          5      </span><span class="comment">/* This should be == TIM_APP_SEND_IMAGE1_CC */</span>
-<a name="l00054"></a>00054 <span class="preprocessor">#define VC0706_MAX_IMAGE_NAME_LEN      15     </span><span class="comment">/* This should be == TIM_MAX_IMAGE_NAME_LEN */</span>
-<a name="l00055"></a>00055 
-<a name="l00056"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html">00056</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>
-<a name="l00057"></a>00057 {
-<a name="l00058"></a>00058     uint8              CmdHeader[CFE_SB_CMD_HDR_SIZE];
-<a name="l00059"></a>00059     <span class="keywordtype">char</span>               ImageName[VC0706_MAX_IMAGE_NAME_LEN];
-<a name="l00060"></a>00060 } <a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html">VC0706_IMAGE_CMD_PKT_t</a>;
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 <span class="preprocessor">#define VC0706_IMAGE_CMD_LNGTH   sizeof ( VC0706_IMAGE_CMD_PKT_t )</span>
-<a name="l00063"></a>00063 <span class="preprocessor"></span>
-<a name="l00064"></a>00064 <span class="comment">/*************************************************************************/</span>
-<a name="l00065"></a>00065 
-<a name="l00066"></a>00066 
-<a name="l00067"></a>00067 <span class="preprocessor">#endif </span><span class="comment">/* _vc0706_msg_h_ */</span>
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="comment">/************************/</span>
-<a name="l00070"></a>00070 <span class="comment">/*  End of File Comment */</span>
-<a name="l00071"></a>00071 <span class="comment">/************************/</span>
+<a name="l00042"></a>00042 <span class="preprocessor">#define VC0706_HK_TLM_LNGTH sizeof(vc0706_hk_tlm_t)</span>
+<a name="l00043"></a>00043 <span class="preprocessor"></span>
+<a name="l00044"></a>00044 <span class="comment">/*************************************************************************/</span>
+<a name="l00045"></a>00045 <span class="comment">/*</span>
+<a name="l00046"></a>00046 <span class="comment">** Definitions redundantly copied from TIM</span>
+<a name="l00047"></a>00047 <span class="comment">** quick and dirty method of sharing this info</span>
+<a name="l00048"></a>00048 <span class="comment">*/</span>
+<a name="l00049"></a>00049 <span class="preprocessor">#define VC0706_IMAGE_CMD_MID 0x188A  </span><span class="comment">/* This should be == TIM_APP_CMD_MID */</span>
+<a name="l00050"></a>00050 <span class="preprocessor">#define VC0706_IMAGE0_CMD_CODE 3     </span><span class="comment">/* This should be == TIM_APP_SEND_IMAGE0_CC */</span>
+<a name="l00051"></a>00051 <span class="preprocessor">#define VC0706_IMAGE1_CMD_CODE 5     </span><span class="comment">/* This should be == TIM_APP_SEND_IMAGE1_CC */</span>
+<a name="l00052"></a>00052 <span class="preprocessor">#define VC0706_MAX_IMAGE_NAME_LEN 15 </span><span class="comment">/* This should be == TIM_MAX_IMAGE_NAME_LEN */</span>
+<a name="l00053"></a>00053 
+<a name="l00057"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html">00057</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00058"></a>00058 {
+<a name="l00059"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">00059</a>     uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE]; 
+<a name="l00060"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ac026daf15f6cb493e23803a9c7e32b94">00060</a>     <span class="keywordtype">char</span> ImageName[VC0706_MAX_IMAGE_NAME_LEN]; 
+<a name="l00061"></a>00061 } <a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html">VC0706_IMAGE_CMD_PKT_t</a>;
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 <span class="preprocessor">#define VC0706_IMAGE_CMD_LNGTH sizeof(VC0706_IMAGE_CMD_PKT_t)</span>
+<a name="l00064"></a>00064 <span class="preprocessor"></span>
+<a name="l00065"></a>00065 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -174,7 +157,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

@@ -8,5 +8,7 @@ var NAVTREEINDEX =
 "struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html":[0,0,3],
 "struct_v_c0706___no_args_cmd__t.html":[0,0,4],
 "classes.html":[0,1],
+"functions.html":[0,2,0],
+"functions_vars.html":[0,2,1],
 "files.html":[1,0]
 };

@@ -76,6 +76,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="classes.html"><span>Data&#160;Structure&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
     </ul>
   </div>
 </div>
@@ -99,14 +100,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">VC0706_IMAGE_CMD_PKT_t Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="VC0706_IMAGE_CMD_PKT_t" --><table class="memberdecls">
+<!-- doxytag: class="VC0706_IMAGE_CMD_PKT_t" -->
+<p><code>#include &lt;<a class="el" href="vc0706__msg_8h_source.html">vc0706_msg.h</a>&gt;</code></p>
+<table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab253d434b1d4b1a3d96ecc6b5cb5ba25"></a><!-- doxytag: member="VC0706_IMAGE_CMD_PKT_t::CmdHeader" ref="ab253d434b1d4b1a3d96ecc6b5cb5ba25" args="[CFE_SB_CMD_HDR_SIZE]" -->
-uint8&#160;</td><td class="memItemRight" valign="bottom"><b>CmdHeader</b> [CFE_SB_CMD_HDR_SIZE]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac026daf15f6cb493e23803a9c7e32b94"></a><!-- doxytag: member="VC0706_IMAGE_CMD_PKT_t::ImageName" ref="ac026daf15f6cb493e23803a9c7e32b94" args="[VC0706_MAX_IMAGE_NAME_LEN]" -->
-char&#160;</td><td class="memItemRight" valign="bottom"><b>ImageName</b> [VC0706_MAX_IMAGE_NAME_LEN]</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">CmdHeader</a> [CFE_SB_CMD_HDR_SIZE]</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ac026daf15f6cb493e23803a9c7e32b94">ImageName</a> [VC0706_MAX_IMAGE_NAME_LEN]</td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>An image command packet. Used to inform the TIM of the filename of a saved image </p>
+</div><hr/><h2>Field Documentation</h2>
+<a class="anchor" id="ab253d434b1d4b1a3d96ecc6b5cb5ba25"></a><!-- doxytag: member="VC0706_IMAGE_CMD_PKT_t::CmdHeader" ref="ab253d434b1d4b1a3d96ecc6b5cb5ba25" args="[CFE_SB_CMD_HDR_SIZE]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8 <a class="el" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">CmdHeader</a>[CFE_SB_CMD_HDR_SIZE]</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The header of the packet </p>
+
+</div>
+</div>
+<a class="anchor" id="ac026daf15f6cb493e23803a9c7e32b94"></a><!-- doxytag: member="VC0706_IMAGE_CMD_PKT_t::ImageName" ref="ac026daf15f6cb493e23803a9c7e32b94" args="[VC0706_MAX_IMAGE_NAME_LEN]" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char <a class="el" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ac026daf15f6cb493e23803a9c7e32b94">ImageName</a>[VC0706_MAX_IMAGE_NAME_LEN]</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The name of the saved image </p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="vc0706__msg_8h_source.html">vc0706_msg.h</a></li>
 </ul>
@@ -117,7 +149,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>ImageName</b> [VC0706
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

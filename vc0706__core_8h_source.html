@@ -100,98 +100,79 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 <span class="comment"> * Retrieved from https://github.com/vyykn/VC0706</span>
 <a name="l00003"></a>00003 <span class="comment"> *</span>
 <a name="l00004"></a>00004 <span class="comment"> * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission</span>
-<a name="l00005"></a>00005 <span class="comment"> */</span>
-<a name="l00006"></a>00006 <span class="preprocessor">#ifndef _vc0706_core_h_</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span><span class="preprocessor">#define _vc0706_core_h_</span>
-<a name="l00008"></a>00008 <span class="preprocessor"></span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;vc0706.h&quot;</span>
-<a name="l00010"></a>00010 <span class="comment">/*</span>
-<a name="l00011"></a>00011 <span class="comment">#include &lt;time.h&gt;</span>
-<a name="l00012"></a>00012 <span class="comment">#include &lt;errno.h&gt;</span>
-<a name="l00013"></a>00013 <span class="comment">#include &lt;stdbool.h&gt;</span>
-<a name="l00014"></a>00014 <span class="comment"></span>
-<a name="l00015"></a>00015 <span class="comment">#include &lt;stdint.h&gt;</span>
-<a name="l00016"></a>00016 <span class="comment">#include &lt;stdlib.h&gt;</span>
-<a name="l00017"></a>00017 <span class="comment"></span>
-<a name="l00018"></a>00018 <span class="comment">// Brian&#39;s DEPS</span>
-<a name="l00019"></a>00019 <span class="comment">#include &lt;stdio.h&gt;</span>
-<a name="l00020"></a>00020 <span class="comment">#include &lt;string.h&gt;</span>
-<a name="l00021"></a>00021 <span class="comment">#include &lt;time.h&gt;</span>
-<a name="l00022"></a>00022 <span class="comment">#include &lt;sys/types.h&gt;</span>
-<a name="l00023"></a>00023 <span class="comment">#include &lt;sys/stat.h&gt;</span>
-<a name="l00024"></a>00024 <span class="comment">#include &lt;unistd.h&gt;</span>
-<a name="l00025"></a>00025 <span class="comment"></span>
-<a name="l00026"></a>00026 <span class="comment">#include &lt;wiringSerial.h&gt;</span>
-<a name="l00027"></a>00027 <span class="comment">#include &lt;wiringPi.h&gt;</span>
-<a name="l00028"></a>00028 <span class="comment">*/</span>
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="comment">// Brian&#39;s Defines</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#define BAUD 38400</span>
-<a name="l00032"></a>00032 <span class="preprocessor"></span>
-<a name="l00033"></a>00033 <span class="preprocessor">#define COMMAND_BEGIN 0x56</span>
-<a name="l00034"></a>00034 <span class="preprocessor"></span><span class="preprocessor">#define RESET 0x26</span>
-<a name="l00035"></a>00035 <span class="preprocessor"></span><span class="preprocessor">#define GEN_VERSION 0x11</span>
-<a name="l00036"></a>00036 <span class="preprocessor"></span><span class="preprocessor">#define READ_FBUF 0x32</span>
-<a name="l00037"></a>00037 <span class="preprocessor"></span><span class="preprocessor">#define GET_FBUF_LEN 0x34</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span><span class="preprocessor">#define FBUF_CTRL 0x36</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_CTRL 0x54</span>
-<a name="l00040"></a>00040 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_STATUS 0x55</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#define READ_DATA 0x30</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span><span class="preprocessor">#define WRITE_DATA 0x31</span>
-<a name="l00043"></a>00043 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_CTRL 0x37</span>
-<a name="l00044"></a>00044 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_STATUS 0x38</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_DETECTED 0x39</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_CTRL 0x42</span>
-<a name="l00047"></a>00047 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_STATUS 0x43</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span><span class="preprocessor">#define TVOUT_CTRL 0x44</span>
-<a name="l00049"></a>00049 <span class="preprocessor"></span><span class="preprocessor">#define OSD_ADD_CHAR 0x45</span>
+<a name="l00005"></a>00005 <span class="comment"> * Edited by Ezra Brooks for use on TRAPSat aboard the CACTUS-1 Mission</span>
+<a name="l00006"></a>00006 <span class="comment"> */</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#ifndef _vc0706_core_h_</span>
+<a name="l00008"></a>00008 <span class="preprocessor"></span><span class="preprocessor">#define _vc0706_core_h_</span>
+<a name="l00009"></a>00009 <span class="preprocessor"></span>
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;vc0706.h&quot;</span>
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="comment">// Brian&#39;s Defines</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#define BAUD 38400</span>
+<a name="l00014"></a>00014 <span class="preprocessor"></span>
+<a name="l00015"></a>00015 <span class="preprocessor">#define SERIAL_NUMBER 0x00</span>
+<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#define COMMAND_BEGIN 0x56</span>
+<a name="l00017"></a>00017 <span class="preprocessor"></span><span class="preprocessor">#define COMMAND_SUCCESS 0x76</span>
+<a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor">#define RESET 0x26</span>
+<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define GEN_VERSION 0x11</span>
+<a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define READ_FBUF 0x32</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define GET_FBUF_LEN 0x34</span>
+<a name="l00022"></a>00022 <span class="preprocessor"></span><span class="preprocessor">#define FBUF_CTRL 0x36</span>
+<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_CTRL 0x54</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_STATUS 0x55</span>
+<a name="l00025"></a>00025 <span class="preprocessor"></span><span class="preprocessor">#define READ_DATA 0x30</span>
+<a name="l00026"></a>00026 <span class="preprocessor"></span><span class="preprocessor">#define WRITE_DATA 0x31</span>
+<a name="l00027"></a>00027 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_CTRL 0x37</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_STATUS 0x38</span>
+<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_DETECTED 0x39</span>
+<a name="l00030"></a>00030 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_CTRL 0x42</span>
+<a name="l00031"></a>00031 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_STATUS 0x43</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span><span class="preprocessor">#define TVOUT_CTRL 0x44</span>
+<a name="l00033"></a>00033 <span class="preprocessor"></span><span class="preprocessor">#define OSD_ADD_CHAR 0x45</span>
+<a name="l00034"></a>00034 <span class="preprocessor"></span>
+<a name="l00035"></a>00035 <span class="preprocessor">#define STOPCURRENTFRAME 0x0</span>
+<a name="l00036"></a>00036 <span class="preprocessor"></span><span class="preprocessor">#define STOPNEXTFRAME 0x1</span>
+<a name="l00037"></a>00037 <span class="preprocessor"></span><span class="preprocessor">#define RESUMEFRAME 0x3</span>
+<a name="l00038"></a>00038 <span class="preprocessor"></span><span class="preprocessor">#define STEPFRAME 0x2</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span>
+<a name="l00040"></a>00040 <span class="preprocessor">#define SIZE640 0x00</span>
+<a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#define SIZE320 0x11</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span><span class="preprocessor">#define SIZE160 0x22</span>
+<a name="l00043"></a>00043 <span class="preprocessor"></span>
+<a name="l00044"></a>00044 <span class="preprocessor">#define MOTIONCONTROL 0x0</span>
+<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#define UARTMOTION 0x01</span>
+<a name="l00046"></a>00046 <span class="preprocessor"></span><span class="preprocessor">#define ACTIVATEMOTION 0x01</span>
+<a name="l00047"></a>00047 <span class="preprocessor"></span>
+<a name="l00048"></a>00048 <span class="preprocessor">#define SET_ZOOM 0x52</span>
+<a name="l00049"></a>00049 <span class="preprocessor"></span><span class="preprocessor">#define GET_ZOOM 0x53</span>
 <a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00051"></a>00051 <span class="preprocessor">#define STOPCURRENTFRAME 0x0</span>
-<a name="l00052"></a>00052 <span class="preprocessor"></span><span class="preprocessor">#define STOPNEXTFRAME 0x1</span>
-<a name="l00053"></a>00053 <span class="preprocessor"></span><span class="preprocessor">#define RESUMEFRAME 0x3</span>
-<a name="l00054"></a>00054 <span class="preprocessor"></span><span class="preprocessor">#define STEPFRAME 0x2</span>
+<a name="l00051"></a>00051 <span class="preprocessor">#define CAMERABUFFSIZ 100</span>
+<a name="l00052"></a>00052 <span class="preprocessor"></span><span class="preprocessor">#define CAMERADELAY 10</span>
+<a name="l00053"></a>00053 <span class="preprocessor"></span><span class="preprocessor">#define TO_SCALE 1</span>
+<a name="l00054"></a>00054 <span class="preprocessor"></span><span class="preprocessor">#define TO_U 200000</span>
 <a name="l00055"></a>00055 <span class="preprocessor"></span>
-<a name="l00056"></a>00056 <span class="preprocessor">#define SIZE640 0x00</span>
-<a name="l00057"></a>00057 <span class="preprocessor"></span><span class="preprocessor">#define SIZE320 0x11</span>
-<a name="l00058"></a>00058 <span class="preprocessor"></span><span class="preprocessor">#define SIZE160 0x22</span>
-<a name="l00059"></a>00059 <span class="preprocessor"></span>
-<a name="l00060"></a>00060 <span class="preprocessor">#define MOTIONCONTROL 0x0</span>
-<a name="l00061"></a>00061 <span class="preprocessor"></span><span class="preprocessor">#define UARTMOTION 0x01</span>
-<a name="l00062"></a>00062 <span class="preprocessor"></span><span class="preprocessor">#define ACTIVATEMOTION 0x01</span>
-<a name="l00063"></a>00063 <span class="preprocessor"></span>
-<a name="l00064"></a>00064 <span class="preprocessor">#define SET_ZOOM 0x52</span>
-<a name="l00065"></a>00065 <span class="preprocessor"></span><span class="preprocessor">#define GET_ZOOM 0x53</span>
-<a name="l00066"></a>00066 <span class="preprocessor"></span>
-<a name="l00067"></a>00067 <span class="preprocessor">#define CAMERABUFFSIZ 100</span>
-<a name="l00068"></a>00068 <span class="preprocessor"></span><span class="preprocessor">#define CAMERADELAY 10</span>
-<a name="l00069"></a>00069 <span class="preprocessor"></span><span class="preprocessor">#define TO_SCALE 1</span>
-<a name="l00070"></a>00070 <span class="preprocessor"></span><span class="preprocessor">#define TO_U 200000</span>
-<a name="l00071"></a>00071 <span class="preprocessor"></span><span class="comment">//#define TO_U 1000000</span>
-<a name="l00072"></a>00072 
-<a name="l00073"></a><a class="code" href="struct_camera__t.html">00073</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_camera__t.html">Camera_t</a> {
-<a name="l00074"></a>00074     <span class="keywordtype">int</span> motion;
-<a name="l00075"></a>00075     <span class="keywordtype">bool</span> ready;
-<a name="l00076"></a>00076     <span class="keywordtype">int</span> ttyInterface;
-<a name="l00077"></a>00077     <span class="keywordtype">int</span> fd;
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079     <span class="keywordtype">int</span> frameptr;
-<a name="l00080"></a>00080     <span class="keywordtype">int</span> bufferLen;
-<a name="l00081"></a>00081     <span class="keywordtype">int</span> serialNum;
-<a name="l00082"></a>00082     <span class="keywordtype">char</span> serialHeader[5];
-<a name="l00083"></a>00083     <span class="keywordtype">char</span> imageName[OS_MAX_PATH_LEN]; <span class="comment">// cFS defined</span>
-<a name="l00084"></a>00084 } <a class="code" href="struct_camera__t.html">Camera_t</a>;
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087 <span class="keywordtype">int</span> init(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, uint8 ttyInterface);
-<a name="l00088"></a>00088 <span class="keywordtype">bool</span> checkReply(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">int</span> cmd, <span class="keywordtype">int</span> size);
-<a name="l00089"></a>00089 <span class="keywordtype">void</span> clearBuffer(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00090"></a>00090 <span class="keywordtype">void</span> reset(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00091"></a>00091 <span class="keywordtype">void</span> resumeVideo(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00092"></a>00092 <span class="keywordtype">int</span>  getVersion(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00093"></a>00093 <span class="keywordtype">void</span> setMotionDetect(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">int</span> flag);
-<a name="l00094"></a>00094 <span class="keywordtype">char</span> * takePicture(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">char</span> * file_path);
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096 <span class="preprocessor">#endif </span><span class="comment">/* _vc0706_core_h__ */</span>
+<a name="l00059"></a><a class="code" href="struct_camera__t.html">00059</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_camera__t.html">Camera_t</a> {
+<a name="l00060"></a><a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f">00060</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f">motion</a>; 
+<a name="l00061"></a><a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749">00061</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749">ready</a>; 
+<a name="l00062"></a><a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf">00062</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf">ttyInterface</a>; 
+<a name="l00063"></a><a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b">00063</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b">fd</a>; 
+<a name="l00065"></a><a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f">00065</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f">frameptr</a>; 
+<a name="l00066"></a><a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52">00066</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52">bufferLen</a>; 
+<a name="l00067"></a><a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205">00067</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205">serialNum</a>; 
+<a name="l00068"></a><a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88">00068</a>     <span class="keywordtype">char</span> <a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88">imageName</a>[OS_MAX_PATH_LEN]; 
+<a name="l00069"></a>00069 } <a class="code" href="struct_camera__t.html">Camera_t</a>;
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072 <span class="keywordtype">int</span> init(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, uint8 ttyInterface);
+<a name="l00073"></a>00073 <span class="keywordtype">bool</span> checkReply(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">int</span> cmd, <span class="keywordtype">int</span> size);
+<a name="l00074"></a>00074 <span class="keywordtype">void</span> clearBuffer(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
+<a name="l00075"></a>00075 <span class="keywordtype">void</span> reset(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
+<a name="l00076"></a>00076 <span class="keywordtype">void</span> resumeVideo(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
+<a name="l00077"></a>00077 <span class="keywordtype">int</span>  getVersion(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
+<a name="l00078"></a>00078 <span class="keywordtype">void</span> setMotionDetect(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">bool</span> flag);
+<a name="l00079"></a>00079 <span class="keywordtype">char</span> * takePicture(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">char</span> * file_path);
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -199,7 +180,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

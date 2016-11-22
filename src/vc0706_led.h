@@ -17,8 +17,8 @@
 
 
 typedef struct led_t {
-	int led_pin; 	/* Expects a GPIO pin value for the LEDs */
-	int led_status;	/* Hold the status of the led, 0 is off 1 is on */
+	int led_pin; 	/**< The GPIO pin this LED is attached to */
+	bool led_status;	/**< Whether the LED is on or not */
 } led_t;
 
 

@@ -11,7 +11,7 @@ extern struct led_t led; /**< LED instance from vc0706.c */
 
 /**
  * Initializes the cameras' serial interfaces.
- * \param cam - A pointer to the Camera structure to initialize
+ * \param cam[in,out] - A pointer to the Camera structure to initialize
  * \param ttyInterface - The serial (TX/RX) interface the camera is plugged into. In the case of the CACTUS-1 Pi-Sat boards, 0 and 1 are valid.
  */
 int init(Camera_t *cam, uint8 ttyInterface)
@@ -171,7 +171,7 @@ int getVersion(Camera_t *cam)
 
 /**
  * Enables or disables motion detection on the specified camera
- * \param cam - A pointer to the camera to set the motion detection flag on
+ * \param cam[in,out] - A pointer to the camera to set the motion detection flag on
  * \param flag - Enable (1) or disable (0) motion detection.
  */
 void setMotionDetect(Camera_t *cam, bool flag)
@@ -184,6 +184,8 @@ void setMotionDetect(Camera_t *cam, bool flag)
     uint8_t commMotionControlArgs[] = {0x01, (uint8_t)flag};
     sendCommand(cam, COMM_MOTION_CTRL, commMotionControlArgs, sizeof(commMotionControlArgs));
 
+    // Set motion flag on camera
+    cam->motion = flag;
     clearBuffer(cam);
 }
 
@@ -207,7 +209,7 @@ void sendCommand(Camera_t *cam, uint8_t cmd, uint8_t args[], uint8_t argLen)
 
 /**
  * Takes a picture and writes it to disk.
- * \param cam - A pointer to the camera to take a picture with
+ * \param cam[in,out] - A pointer to the camera to take a picture with
  * \param file_path - The name of the file to save to
  */
 char *takePicture(Camera_t *cam, char *file_path)

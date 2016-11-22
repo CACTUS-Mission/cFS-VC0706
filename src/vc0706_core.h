@@ -57,15 +57,14 @@
  * Represents a VC0706 camera attached via serial
  */
 typedef struct Camera_t {
-    int motion;
-    bool ready;
-    int ttyInterface;
-    int fd;
+    bool motion; /**< Whether or not motion detection is enabled */
+    bool ready; /**< Whether or not the serial interface has been initialized */
+    int ttyInterface; /**< The ID of the tty interface. i.e. 0 for /dev/ttyAMA0 */
+    int fd; /**< The handle for the serial connection */
 
-    int frameptr;
-    int bufferLen;
-    int serialNum;
-    char serialHeader[5];
+    int frameptr; /**< Points to the next frame in the buffer during large read operations */
+    int bufferLen; /**< Length of the camera's buffer */
+    int serialNum; /**< Serial number of the camera. Used for sending commands */
     char imageName[OS_MAX_PATH_LEN]; // cFS defined
 } Camera_t;
 

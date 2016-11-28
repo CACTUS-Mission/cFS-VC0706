@@ -1,4 +1,6 @@
-/*
+/**
+ * \file vc0706_core.h
+ * \brief Header for serial communication with the VC0706 camera
  * Retrieved from https://github.com/vyykn/VC0706
  *
  * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission

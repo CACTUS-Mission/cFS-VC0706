@@ -1,3 +1,7 @@
+/**
+ * \file vc0706_child.c
+ * \brief The child task spawned by the VC0706 app to take pictures
+ */
 #include "vc0706_child.h"
 
 char num_reboots[3];

@@ -1,4 +1,6 @@
-/*
+/**
+ * \file vc0706_core.c
+ * \brief Contains methods for communicating with the VC0706 camera over serial
  * Retrieved from https://github.com/vyykn/VC0706
  *
  * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission

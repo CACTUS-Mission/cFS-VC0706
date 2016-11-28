@@ -1,10 +1,7 @@
-/*******************************************************************************
-** File: vc0706.c
-**
-** Purpose:
-**   This file contains the source code for the VC0706 App.
-**
-*******************************************************************************/
+/**
+ * \file vc0706.c
+ * \brief The core logic for the VC0706 cFS app
+ */
 #include "vc0706.h"
 #include "vc0706_child.h"
 

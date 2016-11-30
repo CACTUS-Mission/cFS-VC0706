@@ -15,8 +15,8 @@
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
 extern uint32 VC0706_ChildTaskID;
 
-int VC0706_ChildInit();
-void VC0706_ChildTask();
+int VC0706_ChildInit(void);
+void VC0706_ChildTask(void);
 int VC0706_SendTimFileName(char *file_name);
 
 #endif

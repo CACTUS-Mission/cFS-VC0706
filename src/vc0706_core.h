@@ -79,5 +79,6 @@ void resumeVideo(Camera_t *cam);
 int  getVersion(Camera_t *cam);
 void setMotionDetect(Camera_t *cam, bool flag);
 char * takePicture(Camera_t *cam, char * file_path);
+void sendCommand(Camera_t *cam, uint8_t cmd, uint8_t args[], uint8_t argLen);
 
 #endif

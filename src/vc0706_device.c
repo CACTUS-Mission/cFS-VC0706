@@ -4,6 +4,7 @@
  */
 #include "vc0706.h"
 #include "vc0706_child.h"
+#include "vc0706_device.h"
 
 // Parallel Pins
 int PARALLEL_PIN_BUS[6] = {36, 35, 34, 33, 32, 31};
@@ -116,7 +117,7 @@ int VC0706_takePics(void)
 		    */
             if ((hk_packet_succes = snprintf(VC0706_HkTelemetryPkt.vc0706_filename, 15, "%.*s", 15, (char *)pic_file_name + 12)) < 0) // only use the filename, not path.
             {
-                OS_printf("VC0706: ERROR: HK sprintf ret [%d] filename [%.*s]\n", hk_packet_succes, 15, (char *)&pic_file_name[12]);
+                OS_printf("VC0706: ERROR: HK sprintf ret [%d] filename [%.*s]\n", (int)hk_packet_succes, 15, (char *)&pic_file_name[12]);
                 // continue
             }
             else
@@ -187,7 +188,7 @@ void updatePhotoCount(uint8 pic_count)
 /**
  * Reads the number of reboots since mission start (from /ram/logs/reboot.txt file)
  */
-void VC0706_setNumReboots()
+void VC0706_setNumReboots(void)
 {
     // Reset all of the characters in num_reboots to NULL
     memset(num_reboots, '0', sizeof(num_reboots));
@@ -201,7 +202,7 @@ void VC0706_setNumReboots()
 
     // Check for file open success
     if (fd != OS_FS_SUCCESS)
-        OS_printf("\tCould not open reboot file in VC, ret = %d!\n", fd);
+        OS_printf("\tCould not open reboot file in VC, ret = %d!\n", (int)fd);
 
     // Read three characters from file into num_reboots
     int os_ret = OS_read(fd, (void *)num_reboots, 3);

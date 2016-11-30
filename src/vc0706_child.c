@@ -18,7 +18,7 @@ char *taskName = "VC0706 Child Task"; /**< Name under which to register this tas
  * \returns The success value of the child task creation function call
  * \sa #VC0706_AppInit
  */
-int VC0706_ChildInit()
+int VC0706_ChildInit(void)
 {
     // Read number of reboots
     VC0706_setNumReboots();
@@ -33,13 +33,13 @@ int VC0706_ChildInit()
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: create task failed: result = %d",
-                          taskName, result);
+                          (int)taskName, (int)result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
                           "%s initialization info: create task complete: result = %d",
-                          taskName, result);
+                          (int)taskName, (int)result);
     }
     return result;
 }
@@ -50,7 +50,7 @@ int VC0706_ChildInit()
  * Should the main loop function return due to a breakdown in the interface handshake with the parent task,
  * this function will self delete as a child task with CFE.
  */
-void VC0706_ChildTask()
+void VC0706_ChildTask(void)
 {
     // The child task runs until the parent dies (normal end) or until it encounters a fatal error (semaphore error, etc.)...
     int32 result = CFE_ES_RegisterChildTask();
@@ -59,12 +59,12 @@ void VC0706_ChildTask()
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: register child failed: result = %d",
-                          taskName, result);
+                          (int)taskName, (int)result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
-                          "%s initialization complete", taskName);
+                          "%s initialization complete", (int)taskName);
 
         // Child task process loop
         VC0706_takePics();

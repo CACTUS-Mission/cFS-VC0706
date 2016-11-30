@@ -8,18 +8,14 @@
 #define LED_PIN 16                 // GPIO pin for LEDs
 #define VC0706_MAX_FILENAME_LEN 24 // Maximum expected filename length /ram/images/<reboots [3 char]>_<cam 0 or 1 [1 char]>_<filenum [3 char]>.jpg
 
-/*
-** Required header files.
-*/
+// Required header files
 #include "cfe.h"
 #include "cfe_error.h"
 #include "cfe_evs.h"
 #include "cfe_sb.h"
 #include "cfe_es.h"
 
-/*
-** App specific files
-*/
+// App specific files
 #include <time.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -44,9 +40,7 @@
 
 #define VC0706_PIPE_DEPTH 32
 
-/*
-** VC0706 Child Task Definitions
-*/
+// VC0706 Child Task Definitions
 #define VC0706_CHILD_TASK_NAME "CAMERA_CONTROL"
 #define VC0706_CHILD_TASK_STACK_SIZE 8192
 #define VC0706_CHILD_TASK_PRIORITY 200

@@ -35,9 +35,7 @@ void VC0706_AppMain()
 
     VC0706_AppInit();
 
-    /*
-    ** VC0706 Runloop
-    */
+    // VC0706 Runloop
     while (CFE_ES_RunLoop(&RunStatus) == TRUE)
     {
         CFE_ES_PerfLogExit(VC0706_PERF_ID);
@@ -90,19 +88,12 @@ void VC0706_AppInit()
                       VC0706_MISSION_REV);
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  VC0706_ProcessCommandPacket                                        */
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*     This routine will process any packet that is received on the VC0706    */
-/*     command pipe.                                                          */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
+/**
+ * Processes a command received on the VC0706 command pipe
+ */
 void VC0706_ProcessCommandPacket(void)
 {
-    CFE_SB_MsgId_t MsgId;
-
-    MsgId = CFE_SB_GetMsgId(VC0706MsgPtr);
+    CFE_SB_MsgId_t MsgId = CFE_SB_GetMsgId(VC0706MsgPtr);
 
     switch (MsgId)
     {
@@ -122,15 +113,11 @@ void VC0706_ProcessCommandPacket(void)
     }
 
     return;
+}
 
-} /* End VC0706_ProcessCommandPacket */
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* VC0706_ProcessGroundCommand() -- VC0706 ground commands                    */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-
+/** 
+ * Processes a ground command received from VC0706_ProcessCommandPacket()
+ */
 void VC0706_ProcessGroundCommand(void)
 {
     uint16 CommandCode;
@@ -155,51 +142,35 @@ void VC0706_ProcessGroundCommand(void)
         break;
     }
     return;
+}
 
-} /* End of VC0706_ProcessGroundCommand() */
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  VC0706_ReportHousekeeping                                              */
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*         This function is triggered in response to a task telemetry request */
-/*         from the housekeeping task. This function will gather the Apps     */
-/*         telemetry, packetize it and send it to the housekeeping task via   */
-/*         the software bus                                                   */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
+/** 
+ * Gathers the app's telemetry, packetizes it and sends it to the housekeeping task via the software bus.
+ * This function is triggered in response to a task telemetry request from the housekeeping task.
+ */
 void VC0706_ReportHousekeeping(void)
 {
     CFE_SB_TimeStampMsg((CFE_SB_Msg_t *)&VC0706_HkTelemetryPkt);
     CFE_SB_SendMsg((CFE_SB_Msg_t *)&VC0706_HkTelemetryPkt);
     return;
+}
 
-} /* End of VC0706_ReportHousekeeping() */
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  VC0706_ResetCounters                                               */
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*         This function resets all the global counter variables that are     */
-/*         part of the task telemetry.                                        */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
+/**
+ * This function resets all the global counter variables that are part of the task telemetry.
+ */
 void VC0706_ResetCounters(void)
 {
-    /* Status of commands processed by the VC0706 App */
+    // Status of commands processed by the VC0706 App
     VC0706_HkTelemetryPkt.vc0706_command_count = 0;
     VC0706_HkTelemetryPkt.vc0706_command_error_count = 0;
 
     CFE_EVS_SendEvent(VC0706_COMMANDRST_INF_EID, CFE_EVS_INFORMATION,
                       "VC0706: RESET command");
-    return;
+}
 
-} /* End of VC0706_ResetCounters() */
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* VC0706_VerifyCmdLength() -- Verify command packet length                   */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/**
+ * Verifies that a command packet's length is correct
+ */
 boolean VC0706_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
 {
     boolean result = TRUE;
@@ -222,5 +193,4 @@ boolean VC0706_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
     }
 
     return (result);
-
-} /* End of VC0706_VerifyCmdLength() */
+}

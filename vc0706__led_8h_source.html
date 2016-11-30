@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 </div>
@@ -111,19 +112,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 <span class="preprocessor">#ifndef _vc0706_led_h_</span>
 <a name="l00014"></a>00014 <span class="preprocessor"></span><span class="preprocessor">#define _vc0706_led_h_</span>
 <a name="l00015"></a>00015 <span class="preprocessor"></span>
-<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;vc0706.h&quot;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="vc0706_8h.html" title="Main header for the VC0706 app.">vc0706.h</a>&quot;</span>
 <a name="l00017"></a>00017 
-<a name="l00021"></a><a class="code" href="structled__t.html">00021</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structled__t.html">led_t</a> {
-<a name="l00022"></a><a class="code" href="structled__t.html#a7612b36c3a93fba36722724c12eee8d1">00022</a>     <span class="keywordtype">int</span> <a class="code" href="structled__t.html#a7612b36c3a93fba36722724c12eee8d1">led_pin</a>;    
-<a name="l00023"></a><a class="code" href="structled__t.html#ac7b2e1b4c965d87f28c956eafd436b88">00023</a>     <span class="keywordtype">bool</span> <a class="code" href="structled__t.html#ac7b2e1b4c965d87f28c956eafd436b88">led_status</a>;    
-<a name="l00024"></a>00024 } <a class="code" href="structled__t.html">led_t</a>;
+<a name="l00021"></a><a class="code" href="structled__t.html">00021</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structled__t.html" title="An LED connected to the Raspberry Pi via GPIO.">led_t</a> {
+<a name="l00022"></a><a class="code" href="structled__t.html#a7612b36c3a93fba36722724c12eee8d1">00022</a>     <span class="keywordtype">int</span> <a class="code" href="structled__t.html#a7612b36c3a93fba36722724c12eee8d1" title="The GPIO pin this LED is attached to.">led_pin</a>;    
+<a name="l00023"></a><a class="code" href="structled__t.html#ac7b2e1b4c965d87f28c956eafd436b88">00023</a>     <span class="keywordtype">bool</span> <a class="code" href="structled__t.html#ac7b2e1b4c965d87f28c956eafd436b88" title="Whether the LED is on or not.">led_status</a>;    
+<a name="l00024"></a>00024 } <a class="code" href="structled__t.html" title="An LED connected to the Raspberry Pi via GPIO.">led_t</a>;
 <a name="l00025"></a>00025 
 <a name="l00026"></a>00026 
-<a name="l00027"></a>00027 <span class="keywordtype">int</span> led_init(<a class="code" href="structled__t.html">led_t</a> *led, <span class="keywordtype">int</span> pin);
+<a name="l00027"></a>00027 <span class="keywordtype">int</span> led_init(<a class="code" href="structled__t.html" title="An LED connected to the Raspberry Pi via GPIO.">led_t</a> *<a class="code" href="vc0706_8c.html#ac0e09cb44dedca43e838e64ea78f90c3" title="Represents the LED flash for the camera.">led</a>, <span class="keywordtype">int</span> pin);
 <a name="l00028"></a>00028 
-<a name="l00029"></a>00029 <span class="keywordtype">void</span> led_on(<a class="code" href="structled__t.html">led_t</a> *led);
+<a name="l00029"></a>00029 <span class="keywordtype">void</span> led_on(<a class="code" href="structled__t.html" title="An LED connected to the Raspberry Pi via GPIO.">led_t</a> *<a class="code" href="vc0706_8c.html#ac0e09cb44dedca43e838e64ea78f90c3" title="Represents the LED flash for the camera.">led</a>);
 <a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="keywordtype">void</span> led_off(<a class="code" href="structled__t.html">led_t</a> *led);
+<a name="l00031"></a>00031 <span class="keywordtype">void</span> led_off(<a class="code" href="structled__t.html" title="An LED connected to the Raspberry Pi via GPIO.">led_t</a> *<a class="code" href="vc0706_8c.html#ac0e09cb44dedca43e838e64ea78f90c3" title="Represents the LED flash for the camera.">led</a>);
 <a name="l00032"></a>00032 
 <a name="l00033"></a>00033 
 <a name="l00034"></a>00034 <span class="preprocessor">#endif </span><span class="comment">/* _vc0706_flash_h_ */</span>
@@ -134,7 +135,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 </div>
@@ -96,83 +97,99 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">src/vc0706_core.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment"> * Retrieved from https://github.com/vyykn/VC0706</span>
-<a name="l00003"></a>00003 <span class="comment"> *</span>
-<a name="l00004"></a>00004 <span class="comment"> * Edited By Zach Richard for use on TRAPSat aboard the RockSat-X 2016 Mission</span>
-<a name="l00005"></a>00005 <span class="comment"> * Edited by Ezra Brooks for use on TRAPSat aboard the CACTUS-1 Mission</span>
-<a name="l00006"></a>00006 <span class="comment"> */</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#ifndef _vc0706_core_h_</span>
-<a name="l00008"></a>00008 <span class="preprocessor"></span><span class="preprocessor">#define _vc0706_core_h_</span>
-<a name="l00009"></a>00009 <span class="preprocessor"></span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;vc0706.h&quot;</span>
-<a name="l00011"></a>00011 
-<a name="l00012"></a>00012 <span class="comment">// Brian&#39;s Defines</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#define BAUD 38400</span>
-<a name="l00014"></a>00014 <span class="preprocessor"></span>
-<a name="l00015"></a>00015 <span class="preprocessor">#define SERIAL_NUMBER 0x00</span>
-<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#define COMMAND_BEGIN 0x56</span>
-<a name="l00017"></a>00017 <span class="preprocessor"></span><span class="preprocessor">#define COMMAND_SUCCESS 0x76</span>
-<a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor">#define RESET 0x26</span>
-<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define GEN_VERSION 0x11</span>
-<a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define READ_FBUF 0x32</span>
-<a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define GET_FBUF_LEN 0x34</span>
-<a name="l00022"></a>00022 <span class="preprocessor"></span><span class="preprocessor">#define FBUF_CTRL 0x36</span>
-<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_CTRL 0x54</span>
-<a name="l00024"></a>00024 <span class="preprocessor"></span><span class="preprocessor">#define DOWNSIZE_STATUS 0x55</span>
-<a name="l00025"></a>00025 <span class="preprocessor"></span><span class="preprocessor">#define READ_DATA 0x30</span>
-<a name="l00026"></a>00026 <span class="preprocessor"></span><span class="preprocessor">#define WRITE_DATA 0x31</span>
-<a name="l00027"></a>00027 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_CTRL 0x37</span>
-<a name="l00028"></a>00028 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_STATUS 0x38</span>
-<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="preprocessor">#define COMM_MOTION_DETECTED 0x39</span>
-<a name="l00030"></a>00030 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_CTRL 0x42</span>
-<a name="l00031"></a>00031 <span class="preprocessor"></span><span class="preprocessor">#define MOTION_STATUS 0x43</span>
-<a name="l00032"></a>00032 <span class="preprocessor"></span><span class="preprocessor">#define TVOUT_CTRL 0x44</span>
-<a name="l00033"></a>00033 <span class="preprocessor"></span><span class="preprocessor">#define OSD_ADD_CHAR 0x45</span>
+<a href="vc0706__core_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00009"></a>00009 <span class="preprocessor">#ifndef _vc0706_core_h_</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span><span class="preprocessor">#define _vc0706_core_h_</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;<a class="code" href="vc0706_8h.html" title="Main header for the VC0706 app.">vc0706.h</a>&quot;</span>
+<a name="l00013"></a>00013 
+<a name="l00015"></a><a class="code" href="vc0706__core_8h.html#a62634036639f88eece6fbf226b45f84b">00015</a> <span class="preprocessor">#define BAUD 38400</span>
+<a name="l00016"></a>00016 <span class="preprocessor"></span>
+<a name="l00017"></a><a class="code" href="vc0706__core_8h.html#a0689e903325cb7af122337cceffcdc02">00017</a> <span class="preprocessor">#define COMMAND_BEGIN 0x56</span>
+<a name="l00018"></a>00018 <span class="preprocessor"></span>
+<a name="l00019"></a><a class="code" href="vc0706__core_8h.html#a898e14ac6208d1e12f9d9efef63a49b9">00019</a> <span class="preprocessor">#define COMMAND_SUCCESS 0x76</span>
+<a name="l00020"></a>00020 <span class="preprocessor"></span>
+<a name="l00021"></a><a class="code" href="vc0706__core_8h.html#ab702106cf3b3e96750b6845ded4e0299">00021</a> <span class="preprocessor">#define RESET 0x26</span>
+<a name="l00022"></a>00022 <span class="preprocessor"></span>
+<a name="l00023"></a><a class="code" href="vc0706__core_8h.html#accf4d6c6bbbe9a37630c9bddca9d41a1">00023</a> <span class="preprocessor">#define GEN_VERSION 0x11</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span>
+<a name="l00025"></a><a class="code" href="vc0706__core_8h.html#a8cfdf5ba5a47ad8f669c3498d4b7115b">00025</a> <span class="preprocessor">#define READ_FBUF 0x32</span>
+<a name="l00026"></a>00026 <span class="preprocessor"></span>
+<a name="l00027"></a><a class="code" href="vc0706__core_8h.html#af3a7af5b6fa6bebd4a090e997eb54c38">00027</a> <span class="preprocessor">#define GET_FBUF_LEN 0x34</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span>
+<a name="l00029"></a><a class="code" href="vc0706__core_8h.html#abc84ac79070ef3b64e7d5bfe261aeffb">00029</a> <span class="preprocessor">#define FBUF_CTRL 0x36</span>
+<a name="l00030"></a>00030 <span class="preprocessor"></span>
+<a name="l00031"></a><a class="code" href="vc0706__core_8h.html#acf8a5f0aff7f8b0e588cfa8ad7d36bb0">00031</a> <span class="preprocessor">#define DOWNSIZE_CTRL 0x54</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span>
+<a name="l00033"></a><a class="code" href="vc0706__core_8h.html#acbca72b35fb31816835a9eac12805ada">00033</a> <span class="preprocessor">#define DOWNSIZE_STATUS 0x55</span>
 <a name="l00034"></a>00034 <span class="preprocessor"></span>
-<a name="l00035"></a>00035 <span class="preprocessor">#define STOPCURRENTFRAME 0x0</span>
-<a name="l00036"></a>00036 <span class="preprocessor"></span><span class="preprocessor">#define STOPNEXTFRAME 0x1</span>
-<a name="l00037"></a>00037 <span class="preprocessor"></span><span class="preprocessor">#define RESUMEFRAME 0x3</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span><span class="preprocessor">#define STEPFRAME 0x2</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span>
-<a name="l00040"></a>00040 <span class="preprocessor">#define SIZE640 0x00</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#define SIZE320 0x11</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span><span class="preprocessor">#define SIZE160 0x22</span>
-<a name="l00043"></a>00043 <span class="preprocessor"></span>
-<a name="l00044"></a>00044 <span class="preprocessor">#define MOTIONCONTROL 0x0</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#define UARTMOTION 0x01</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span><span class="preprocessor">#define ACTIVATEMOTION 0x01</span>
-<a name="l00047"></a>00047 <span class="preprocessor"></span>
-<a name="l00048"></a>00048 <span class="preprocessor">#define SET_ZOOM 0x52</span>
-<a name="l00049"></a>00049 <span class="preprocessor"></span><span class="preprocessor">#define GET_ZOOM 0x53</span>
+<a name="l00035"></a><a class="code" href="vc0706__core_8h.html#a8d406d5aff787991429e62cfd9bac721">00035</a> <span class="preprocessor">#define READ_DATA 0x30</span>
+<a name="l00036"></a>00036 <span class="preprocessor"></span>
+<a name="l00037"></a><a class="code" href="vc0706__core_8h.html#a485de214409cb69e0b6588157d1a3e25">00037</a> <span class="preprocessor">#define WRITE_DATA 0x31</span>
+<a name="l00038"></a>00038 <span class="preprocessor"></span>
+<a name="l00039"></a><a class="code" href="vc0706__core_8h.html#a21d7a58201a55ce28248644fe5465671">00039</a> <span class="preprocessor">#define COMM_MOTION_CTRL 0x37</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a><a class="code" href="vc0706__core_8h.html#a12c162d68aaa1282afe2b4ed94e36a19">00041</a> <span class="preprocessor">#define COMM_MOTION_STATUS 0x38</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span>
+<a name="l00043"></a><a class="code" href="vc0706__core_8h.html#a39e6c9114e4f5a186fe883ce23dbc41d">00043</a> <span class="preprocessor">#define COMM_MOTION_DETECTED 0x39</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span>
+<a name="l00045"></a><a class="code" href="vc0706__core_8h.html#afa6a57569e0167667cdc890f5793d4b4">00045</a> <span class="preprocessor">#define MOTION_CTRL 0x42</span>
+<a name="l00046"></a>00046 <span class="preprocessor"></span>
+<a name="l00047"></a><a class="code" href="vc0706__core_8h.html#aed64939f4b22409394e82cf407c5cecb">00047</a> <span class="preprocessor">#define MOTION_STATUS 0x43</span>
+<a name="l00048"></a>00048 <span class="preprocessor"></span>
+<a name="l00049"></a><a class="code" href="vc0706__core_8h.html#a5ddacc024df082b0c54b7a4a6896dfd9">00049</a> <span class="preprocessor">#define TVOUT_CTRL 0x44</span>
 <a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00051"></a>00051 <span class="preprocessor">#define CAMERABUFFSIZ 100</span>
-<a name="l00052"></a>00052 <span class="preprocessor"></span><span class="preprocessor">#define CAMERADELAY 10</span>
-<a name="l00053"></a>00053 <span class="preprocessor"></span><span class="preprocessor">#define TO_SCALE 1</span>
-<a name="l00054"></a>00054 <span class="preprocessor"></span><span class="preprocessor">#define TO_U 200000</span>
-<a name="l00055"></a>00055 <span class="preprocessor"></span>
-<a name="l00059"></a><a class="code" href="struct_camera__t.html">00059</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_camera__t.html">Camera_t</a> {
-<a name="l00060"></a><a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f">00060</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f">motion</a>; 
-<a name="l00061"></a><a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749">00061</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749">ready</a>; 
-<a name="l00062"></a><a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf">00062</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf">ttyInterface</a>; 
-<a name="l00063"></a><a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b">00063</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b">fd</a>; 
-<a name="l00065"></a><a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f">00065</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f">frameptr</a>; 
-<a name="l00066"></a><a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52">00066</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52">bufferLen</a>; 
-<a name="l00067"></a><a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205">00067</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205">serialNum</a>; 
-<a name="l00068"></a><a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88">00068</a>     <span class="keywordtype">char</span> <a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88">imageName</a>[OS_MAX_PATH_LEN]; 
-<a name="l00069"></a>00069 } <a class="code" href="struct_camera__t.html">Camera_t</a>;
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072 <span class="keywordtype">int</span> init(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, uint8 ttyInterface);
-<a name="l00073"></a>00073 <span class="keywordtype">bool</span> checkReply(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">int</span> cmd, <span class="keywordtype">int</span> size);
-<a name="l00074"></a>00074 <span class="keywordtype">void</span> clearBuffer(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00075"></a>00075 <span class="keywordtype">void</span> reset(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00076"></a>00076 <span class="keywordtype">void</span> resumeVideo(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00077"></a>00077 <span class="keywordtype">int</span>  getVersion(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam);
-<a name="l00078"></a>00078 <span class="keywordtype">void</span> setMotionDetect(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">bool</span> flag);
-<a name="l00079"></a>00079 <span class="keywordtype">char</span> * takePicture(<a class="code" href="struct_camera__t.html">Camera_t</a> *cam, <span class="keywordtype">char</span> * file_path);
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081 <span class="preprocessor">#endif</span>
+<a name="l00051"></a><a class="code" href="vc0706__core_8h.html#a8fea96d2bd6a3aeff9f8ad660339be9a">00051</a> <span class="preprocessor">#define OSD_ADD_CHAR 0x45</span>
+<a name="l00052"></a>00052 <span class="preprocessor"></span>
+<a name="l00053"></a><a class="code" href="vc0706__core_8h.html#a4cfe619c85e19fc1c5b22fa8709811ef">00053</a> <span class="preprocessor">#define STOPCURRENTFRAME 0x0</span>
+<a name="l00054"></a>00054 <span class="preprocessor"></span>
+<a name="l00055"></a><a class="code" href="vc0706__core_8h.html#a7bf5f6a15a7885b04d452963f8ab7c50">00055</a> <span class="preprocessor">#define STOPNEXTFRAME 0x1</span>
+<a name="l00056"></a>00056 <span class="preprocessor"></span>
+<a name="l00057"></a><a class="code" href="vc0706__core_8h.html#aa225687342d2281db872e928d74c507c">00057</a> <span class="preprocessor">#define RESUMEFRAME 0x3</span>
+<a name="l00058"></a>00058 <span class="preprocessor"></span>
+<a name="l00059"></a><a class="code" href="vc0706__core_8h.html#ae792b09420d201857120234fc30a9f92">00059</a> <span class="preprocessor">#define STEPFRAME 0x2</span>
+<a name="l00060"></a>00060 <span class="preprocessor"></span>
+<a name="l00061"></a><a class="code" href="vc0706__core_8h.html#a3c2b3fe2eb1edfd249e49cbe471d1c2f">00061</a> <span class="preprocessor">#define SIZE640 0x00</span>
+<a name="l00062"></a>00062 <span class="preprocessor"></span>
+<a name="l00063"></a><a class="code" href="vc0706__core_8h.html#a1c2a959c0182450d70ad51cc8aa54c34">00063</a> <span class="preprocessor">#define SIZE320 0x11</span>
+<a name="l00064"></a>00064 <span class="preprocessor"></span>
+<a name="l00065"></a><a class="code" href="vc0706__core_8h.html#a394f8d10dbb0ea20ce55bc52a4bd990d">00065</a> <span class="preprocessor">#define SIZE160 0x22</span>
+<a name="l00066"></a>00066 <span class="preprocessor"></span>
+<a name="l00067"></a><a class="code" href="vc0706__core_8h.html#ae89b0d653fc47c9936c94b298402746e">00067</a> <span class="preprocessor">#define SET_ZOOM 0x52</span>
+<a name="l00068"></a>00068 <span class="preprocessor"></span>
+<a name="l00069"></a><a class="code" href="vc0706__core_8h.html#ad36798f938acea2c40104ad55a983f65">00069</a> <span class="preprocessor">#define GET_ZOOM 0x53</span>
+<a name="l00070"></a>00070 <span class="preprocessor"></span>
+<a name="l00071"></a><a class="code" href="vc0706__core_8h.html#ac823de6ca06ae05133112dbb9342c7e1">00071</a> <span class="preprocessor">#define CAMERABUFFSIZ 100</span>
+<a name="l00072"></a>00072 <span class="preprocessor"></span>
+<a name="l00073"></a><a class="code" href="vc0706__core_8h.html#a7ef2f3cb1f869be41c1a903db91c7f36">00073</a> <span class="preprocessor">#define CAMERADELAY 10</span>
+<a name="l00074"></a>00074 <span class="preprocessor"></span>
+<a name="l00075"></a><a class="code" href="vc0706__core_8h.html#a3463b9185cdf6d80413e19df14512bbf">00075</a> <span class="preprocessor">#define TO_SCALE 1</span>
+<a name="l00076"></a>00076 <span class="preprocessor"></span>
+<a name="l00077"></a><a class="code" href="vc0706__core_8h.html#a3f938878c6daaac6205e7901ca428c51">00077</a> <span class="preprocessor">#define TO_U 200000</span>
+<a name="l00078"></a>00078 <span class="preprocessor"></span>
+<a name="l00082"></a><a class="code" href="struct_camera__t.html">00082</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> {
+<a name="l00083"></a><a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f">00083</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a139823716662625b18597ba6a3476e4f" title="Whether or not motion detection is enabled.">motion</a>; 
+<a name="l00084"></a><a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749">00084</a>     <span class="keywordtype">bool</span> <a class="code" href="struct_camera__t.html#a65cf7d7f8e531611b245355ab91fd749" title="Whether or not the serial interface has been initialized.">ready</a>; 
+<a name="l00085"></a><a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf">00085</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6db053e4e1638f616eec2a26052c4baf" title="The ID of the tty interface.">ttyInterface</a>; 
+<a name="l00086"></a><a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b">00086</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a6f8059414f0228f0256115e024eeed4b" title="The handle for the serial connection.">fd</a>; 
+<a name="l00088"></a><a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f">00088</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a5e95accca4e3ccfc17c8bc9dd88c5b8f" title="Points to the next frame in the buffer during large read operations.">frameptr</a>; 
+<a name="l00089"></a><a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52">00089</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a52a25bb51473f2562b9d2b921d68ac52" title="Length of the camera&#39;s buffer.">bufferLen</a>; 
+<a name="l00090"></a><a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205">00090</a>     <span class="keywordtype">int</span> <a class="code" href="struct_camera__t.html#a2e040d9ede6e58657b9472b0c0080205" title="Serial number of the camera.">serialNum</a>; 
+<a name="l00091"></a><a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88">00091</a>     <span class="keywordtype">char</span> <a class="code" href="struct_camera__t.html#ae008f9fd7826d8222e9476d4829e4d88" title="Name of the saved image.">imageName</a>[OS_MAX_PATH_LEN]; 
+<a name="l00092"></a>00092 } <a class="code" href="vc0706__core_8h.html#a36973186d79c9bf8ec934a8d05c88016" title="Represents a VC0706 camera attached via serial.">Camera_t</a>;
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 <span class="keywordtype">int</span> <a class="code" href="vc0706__core_8c.html#ad4809b8095e9296d6da3e01628414ffb" title="Initializes the cameras&#39; serial interfaces.">init</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>, uint8 ttyInterface);
+<a name="l00096"></a>00096 <span class="keywordtype">bool</span> <a class="code" href="vc0706__core_8c.html#af055f22c972dbee9389f7a2df532f154" title="Ensure that the camera has responded properly to a specified command.">checkReply</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>, <span class="keywordtype">int</span> cmd, <span class="keywordtype">int</span> size);
+<a name="l00097"></a>00097 <span class="keywordtype">void</span> <a class="code" href="vc0706__core_8c.html#a4116a92bc5f85cc232b22159361ee6c9" title="Reads queued bytes out of the specified camera&#39;s buffer.">clearBuffer</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>);
+<a name="l00098"></a>00098 <span class="keywordtype">void</span> <a class="code" href="vc0706__core_8c.html#ae82873b7de274ac9fb08bb13f48a9634" title="Issues a reset command to the specified camera.">reset</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>);
+<a name="l00099"></a>00099 <span class="keywordtype">void</span> <a class="code" href="vc0706__core_8c.html#a50d658ffdb164442739d11df6e6cda80" title="Issues a resume video command to the specified camera.">resumeVideo</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>);
+<a name="l00100"></a>00100 <span class="keywordtype">int</span>  <a class="code" href="vc0706__core_8c.html#ab65f5d16325110519555822db6d6c202" title="Issues a version command to the camera to make sure the camera is connected.">getVersion</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>);
+<a name="l00101"></a>00101 <span class="keywordtype">void</span> <a class="code" href="vc0706__core_8c.html#ace83a279e6422e21b0d1a31f16aa735a" title="Enables or disables motion detection on the specified camera.">setMotionDetect</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>, <span class="keywordtype">bool</span> flag);
+<a name="l00102"></a>00102 <span class="keywordtype">char</span> * <a class="code" href="vc0706__core_8c.html#ad5163de3b5ea289435ff37d611aa6306" title="Takes a picture and writes it to disk.">takePicture</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>, <span class="keywordtype">char</span> * file_path);
+<a name="l00103"></a>00103 <span class="keywordtype">void</span> <a class="code" href="vc0706__core_8c.html#a20001c347dbb7edb577f1fc865e25bcd" title="Sends a command over serial to the specified camera.">sendCommand</a>(<a class="code" href="struct_camera__t.html" title="Represents a VC0706 camera attached via serial.">Camera_t</a> *<a class="code" href="vc0706_8c.html#a658672a4811025e1e68dcf1338c22864" title="Represents one of the two cameras.">cam</a>, uint8_t cmd, uint8_t args[], uint8_t argLen);
+<a name="l00104"></a>00104 
+<a name="l00105"></a>00105 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -180,7 +197,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -191,7 +208,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><b>vc0706_core.h</b>      </li>
+      <li class="navelem"><a class="el" href="vc0706__core_8h.html">vc0706_core.h</a>      </li>
 
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">

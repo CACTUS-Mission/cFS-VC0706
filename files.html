@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li class="current"><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 </div>
@@ -99,10 +100,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock">Here is a list of all documented files with brief descriptions:</div><table>
   <tr><td class="indexkey">mission_inc/<b>vc0706_perfids.h</b> <a href="vc0706__perfids_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
   <tr><td class="indexkey">platform_inc/<b>vc0706_msgids.h</b> <a href="vc0706__msgids_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
-  <tr><td class="indexkey">src/<b>vc0706.h</b> <a href="vc0706_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
-  <tr><td class="indexkey">src/<b>vc0706_child.h</b> <a href="vc0706__child_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
-  <tr><td class="indexkey">src/<b>vc0706_core.h</b> <a href="vc0706__core_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
-  <tr><td class="indexkey">src/<b>vc0706_events.h</b> <a href="vc0706__events_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706_8c.html">vc0706.c</a></td><td class="indexvalue">The core logic for the VC0706 cFS app </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706_8h.html">vc0706.h</a> <a href="vc0706_8h_source.html">[code]</a></td><td class="indexvalue">Main header for the VC0706 app </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__child_8c.html">vc0706_child.c</a></td><td class="indexvalue">The child task spawned by the VC0706 app to take pictures </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__child_8h.html">vc0706_child.h</a> <a href="vc0706__child_8h_source.html">[code]</a></td><td class="indexvalue">The header for the VC0706 child task </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__core_8c.html">vc0706_core.c</a></td><td class="indexvalue">Contains methods for communicating with the VC0706 camera over serial Retrieved from <a href="https://github.com/vyykn/VC0706">https://github.com/vyykn/VC0706</a> </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__core_8h.html">vc0706_core.h</a> <a href="vc0706__core_8h_source.html">[code]</a></td><td class="indexvalue">Header for serial communication with the VC0706 camera Retrieved from <a href="https://github.com/vyykn/VC0706">https://github.com/vyykn/VC0706</a> </td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__device_8c.html">vc0706_device.c</a></td><td class="indexvalue">Contains additional VC0706 communication logic (see <a class="el" href="vc0706__core_8c.html" title="Contains methods for communicating with the VC0706 camera over serial Retrieved from https://github...">vc0706_core.c</a>) </td></tr>
+  <tr><td class="indexkey">src/<b>vc0706_device.h</b> <a href="vc0706__device_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
+  <tr><td class="indexkey">src/<a class="el" href="vc0706__events_8h.html">vc0706_events.h</a> <a href="vc0706__events_8h_source.html">[code]</a></td><td class="indexvalue">Defines VC0706 app event IDs </td></tr>
   <tr><td class="indexkey">src/<b>vc0706_led.h</b> <a href="vc0706__led_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
   <tr><td class="indexkey">src/<b>vc0706_msg.h</b> <a href="vc0706__msg_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
   <tr><td class="indexkey">src/<b>vc0706_version.h</b> <a href="vc0706__version_8h_source.html">[code]</a></td><td class="indexvalue"></td></tr>
@@ -113,7 +119,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

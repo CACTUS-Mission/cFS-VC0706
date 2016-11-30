@@ -101,75 +101,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="OS_PACK" -->
+<p>A VC0706 housekeeping telemetry packet.  
+ <a href="struct_o_s___p_a_c_k.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="vc0706__msg_8h_source.html">vc0706_msg.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a1220357b1bf83711d1f76f0fed082a89">TlmHeader</a> [CFE_SB_TLM_HDR_SIZE]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">vc0706_command_error_count</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">vc0706_command_count</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">vc0706_filename</a> [VC0706_MAX_FILENAME_LEN]</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1220357b1bf83711d1f76f0fed082a89"></a><!-- doxytag: member="OS_PACK::TlmHeader" ref="a1220357b1bf83711d1f76f0fed082a89" args="[CFE_SB_TLM_HDR_SIZE]" -->
+uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a1220357b1bf83711d1f76f0fed082a89">TlmHeader</a> [CFE_SB_TLM_HDR_SIZE]</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The header of the packet. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a489a0ef9c0a92e00e18c756442079392"></a><!-- doxytag: member="OS_PACK::vc0706_command_error_count" ref="a489a0ef9c0a92e00e18c756442079392" args="" -->
+uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">vc0706_command_error_count</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of VC0706 command errors to report. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53e1b36e278543f836be7c9609a7209a"></a><!-- doxytag: member="OS_PACK::vc0706_command_count" ref="a53e1b36e278543f836be7c9609a7209a" args="" -->
+uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">vc0706_command_count</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of VC0706 commands issued. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a135e41b80557b4092f629e08e92bea53"></a><!-- doxytag: member="OS_PACK::vc0706_filename" ref="a135e41b80557b4092f629e08e92bea53" args="[VC0706_MAX_FILENAME_LEN]" -->
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">vc0706_filename</a> [<a class="el" href="vc0706_8h.html#afd1b7b5c085f76948d4c8f4d4b35b9e5">VC0706_MAX_FILENAME_LEN</a>]</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The filename of the picture taken by the VC0706 application. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>A VC0706 housekeeping telemetry packet </p>
-</div><hr/><h2>Field Documentation</h2>
-<a class="anchor" id="a1220357b1bf83711d1f76f0fed082a89"></a><!-- doxytag: member="OS_PACK::TlmHeader" ref="a1220357b1bf83711d1f76f0fed082a89" args="[CFE_SB_TLM_HDR_SIZE]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8 <a class="el" href="struct_o_s___p_a_c_k.html#a1220357b1bf83711d1f76f0fed082a89">TlmHeader</a>[CFE_SB_TLM_HDR_SIZE]</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The header of the packet </p>
-
-</div>
-</div>
-<a class="anchor" id="a53e1b36e278543f836be7c9609a7209a"></a><!-- doxytag: member="OS_PACK::vc0706_command_count" ref="a53e1b36e278543f836be7c9609a7209a" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8 <a class="el" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">vc0706_command_count</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The amount of VC0706 commands issued </p>
-
-</div>
-</div>
-<a class="anchor" id="a489a0ef9c0a92e00e18c756442079392"></a><!-- doxytag: member="OS_PACK::vc0706_command_error_count" ref="a489a0ef9c0a92e00e18c756442079392" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8 <a class="el" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">vc0706_command_error_count</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The amount of VC0706 command errors to report </p>
-
-</div>
-</div>
-<a class="anchor" id="a135e41b80557b4092f629e08e92bea53"></a><!-- doxytag: member="OS_PACK::vc0706_filename" ref="a135e41b80557b4092f629e08e92bea53" args="[VC0706_MAX_FILENAME_LEN]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char <a class="el" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">vc0706_filename</a>[VC0706_MAX_FILENAME_LEN]</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The filename of the picture taken by the VC0706 application </p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>A VC0706 housekeeping telemetry packet. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="vc0706__msg_8h_source.html">vc0706_msg.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -179,7 +133,7 @@ Data Fields</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

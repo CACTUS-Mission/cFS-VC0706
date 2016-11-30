@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 </div>
@@ -119,15 +120,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00024"></a><a class="code" href="struct_v_c0706___no_args_cmd__t.html">00024</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
 <a name="l00025"></a>00025 {
 <a name="l00026"></a><a class="code" href="struct_v_c0706___no_args_cmd__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">00026</a>     uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE]; 
-<a name="l00028"></a>00028 } <a class="code" href="struct_v_c0706___no_args_cmd__t.html">VC0706_NoArgsCmd_t</a>;
+<a name="l00028"></a>00028 } <a class="code" href="struct_v_c0706___no_args_cmd__t.html" title="A &quot;no arguments&quot; command for this subsystem.">VC0706_NoArgsCmd_t</a>;
 <a name="l00029"></a>00029 
 <a name="l00033"></a><a class="code" href="struct_o_s___p_a_c_k.html">00033</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
 <a name="l00034"></a>00034 {
 <a name="l00035"></a><a class="code" href="struct_o_s___p_a_c_k.html#a1220357b1bf83711d1f76f0fed082a89">00035</a>     uint8 TlmHeader[CFE_SB_TLM_HDR_SIZE];          
-<a name="l00036"></a><a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">00036</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">vc0706_command_error_count</a>;              
-<a name="l00037"></a><a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">00037</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">vc0706_command_count</a>;                    
-<a name="l00038"></a><a class="code" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">00038</a>     <span class="keywordtype">char</span> vc0706_filename[VC0706_MAX_FILENAME_LEN]; 
-<a name="l00040"></a>00040 } <a class="code" href="struct_o_s___p_a_c_k.html">OS_PACK</a> vc0706_hk_tlm_t;
+<a name="l00036"></a><a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392">00036</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a489a0ef9c0a92e00e18c756442079392" title="The amount of VC0706 command errors to report.">vc0706_command_error_count</a>;              
+<a name="l00037"></a><a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a">00037</a>     uint8 <a class="code" href="struct_o_s___p_a_c_k.html#a53e1b36e278543f836be7c9609a7209a" title="The amount of VC0706 commands issued.">vc0706_command_count</a>;                    
+<a name="l00038"></a><a class="code" href="struct_o_s___p_a_c_k.html#a135e41b80557b4092f629e08e92bea53">00038</a>     <span class="keywordtype">char</span> vc0706_filename[<a class="code" href="vc0706_8h.html#afd1b7b5c085f76948d4c8f4d4b35b9e5" title="Maximum expected filename length /ram/images/&lt;reboots [3 char]&gt;_&lt;cam 0 or 1 [1 char]&gt;_&lt;filenum [3 cha...">VC0706_MAX_FILENAME_LEN</a>]; 
+<a name="l00040"></a>00040 } <a class="code" href="struct_o_s___p_a_c_k.html" title="A VC0706 housekeeping telemetry packet.">OS_PACK</a> vc0706_hk_tlm_t;
 <a name="l00041"></a>00041 
 <a name="l00042"></a>00042 <span class="preprocessor">#define VC0706_HK_TLM_LNGTH sizeof(vc0706_hk_tlm_t)</span>
 <a name="l00043"></a>00043 <span class="preprocessor"></span>
@@ -145,7 +146,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00058"></a>00058 {
 <a name="l00059"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ab253d434b1d4b1a3d96ecc6b5cb5ba25">00059</a>     uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE]; 
 <a name="l00060"></a><a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html#ac026daf15f6cb493e23803a9c7e32b94">00060</a>     <span class="keywordtype">char</span> ImageName[VC0706_MAX_IMAGE_NAME_LEN]; 
-<a name="l00061"></a>00061 } <a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html">VC0706_IMAGE_CMD_PKT_t</a>;
+<a name="l00061"></a>00061 } <a class="code" href="struct_v_c0706___i_m_a_g_e___c_m_d___p_k_t__t.html" title="An image command packet.">VC0706_IMAGE_CMD_PKT_t</a>;
 <a name="l00062"></a>00062 
 <a name="l00063"></a>00063 <span class="preprocessor">#define VC0706_IMAGE_CMD_LNGTH sizeof(VC0706_IMAGE_CMD_PKT_t)</span>
 <a name="l00064"></a>00064 <span class="preprocessor"></span>
@@ -157,7 +158,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

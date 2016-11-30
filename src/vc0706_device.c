@@ -42,7 +42,7 @@ int VC0706_takePics(Camera_t cameras[], int numberOfCameras)
     {
         // TODO: Figure out a better way to initialize TTY interfaces than just by index - just in case.
         // Attempt to initalize Camera #1
-        if (init(&cam, i) == -1) // Error
+        if (init(&(cameras[i]), i) == -1) // Error
         {
             OS_printf("Camera initialization error.\n");
             return -1;
@@ -60,7 +60,7 @@ int VC0706_takePics(Camera_t cameras[], int numberOfCameras)
               
                NOTE: Not sure if this should be done every loop iteration. It is a good way to check on the Camera, but maybe wasteful of time.
             */
-            if ((getVersion(&(cameras[i])) == -1)
+            if (getVersion(&(cameras[i])) == -1)
             {
                 // NOTE: vc0706_core::checkReply() (called in getVersion()) does CVE logging.
                 OS_printf("Failed communication to Camera %d.\n", i);

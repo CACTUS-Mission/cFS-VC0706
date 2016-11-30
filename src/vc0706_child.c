@@ -70,7 +70,7 @@ void VC0706_ChildTask(void)
         Camera_t cam_one;
         Camera_t cam_two;
         // Attempt to initialize the cameras on /dev/ttyama0 and /dev/ttyama1
-        if (init(&cam_one), 0) == -1 || init(&cam_two, 1) == -1) // Error
+        if (init(&cam_one, 0) == -1 || init(&cam_two, 1) == -1) // Error
         {
             OS_printf("Camera initialization error.\n");
         } else

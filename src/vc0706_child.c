@@ -33,13 +33,13 @@ int VC0706_ChildInit(void)
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: create task failed: result = %d",
-                          (int)taskName, (int)result);
+                          taskName, (int)result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
                           "%s initialization info: create task complete: result = %d",
-                          (int)taskName, (int)result);
+                          taskName, (int)result);
     }
     return result;
 }
@@ -59,12 +59,12 @@ void VC0706_ChildTask(void)
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: register child failed: result = %d",
-                          (int)taskName, (int)result);
+                          taskName, (int)result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
-                          "%s initialization complete", (int)taskName);
+                          "%s initialization complete", taskName);
 
         // Child task process loop
         VC0706_takePics();
@@ -102,7 +102,7 @@ int VC0706_SendTimFileName(char *file_name)
 
     if (ret < 0)
     {
-        OS_printf("VC0706: SendTimFileName() Set Cmd Code Ret [%d].\n", ret);
+        OS_printf("VC0706: SendTimFileName() Set Cmd Code Ret [%d].\n", (int)ret);
     }
 
     snprintf(VC0706_ImageCmdPkt.ImageName, sizeof(VC0706_ImageCmdPkt.ImageName), "%s", file_name);

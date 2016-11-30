@@ -27,15 +27,6 @@
 #include <wiringSerial.h>
 #include <wiringPi.h>
 
-#include "vc0706_perfids.h"
-#include "vc0706_msgids.h"
-#include "vc0706_msg.h"
-#include "vc0706_events.h"
-#include "vc0706_version.h"
-
-#include "vc0706_led.h"
-#include "vc0706_core.h"
-
 /** The depth for the command pipe (maximum number of commands stored in the buffer) */
 #define VC0706_PIPE_DEPTH 32
 /** Name for the VC0706 CFE child task */
@@ -48,6 +39,16 @@
 #define LED_PIN 16
 /** Maximum expected filename length /ram/images/<reboots [3 char]>_<cam 0 or 1 [1 char]>_<filenum [3 char]>.jpg */
 #define VC0706_MAX_FILENAME_LEN 24
+
+// This application's component headers
+#include "vc0706_perfids.h"
+#include "vc0706_msgids.h"
+#include "vc0706_msg.h"
+#include "vc0706_events.h"
+#include "vc0706_version.h"
+
+#include "vc0706_led.h"
+#include "vc0706_core.h"
 
 void VC0706_AppMain(void);
 void VC0706_AppInit(void);

@@ -12,177 +12,107 @@ int PARALLEL_PIN_BUS[6] = {36, 35, 34, 33, 32, 31};
 // External References
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
 extern struct led_t led; /**< LED instance from vc0706.c */
-extern struct Camera_t cam;
 
 /** Holds the number of times the system has rebooted (populated by VC0706_setNumReboots()) */
 char num_reboots[3];
 
 /**
  * Core loop for taking pictures
+ * @param[in,out] cameras - An array of camera structs to initialize and use to take pictures
+ * @param[in] numberOfCameras - The length of the cameras array
  */
-int VC0706_takePics(void)
+int VC0706_takePics(Camera_t cameras[], int numberOfCameras)
 {
-    int32 hk_packet_succes = 0;
+    int32 hk_packet_success = 0;
 
-    /*
-    ** Path that pictures should be stored in
-    **
-    ** NOTE: if path is greater than 16 chars, imageName[] in vc0706_core.h will need to be enlarged accordingly.
-    */
+    // Initialize an empty path string
     char path[OS_MAX_PATH_LEN];
     memset(path, '\0', sizeof(path));
 
+    // Initialize an empty filename string
     char file_name[15];
     memset(file_name, '\0', sizeof(file_name));
 
-    /*
-    ** get Num reboots
-    */
-    //OS_printf("VC0706: Attempting to VC0706_setNumReboots()...\n");
-    //VC0706_setNumReboots();
-
-    /*
-    ** Attempt to initialize LED
-    */
+    // Attempt to initialize LED
     led_init(&led, (int)LED_PIN);
 
-    /*
-    ** Attempt to initalize Camera #1
-    */
-    if (init(&cam, 0) == -1) // Error
+    // TODO: probably change this to something like currentCamera for readability
+    int i;
+    for (i = 0; i < numberOfCameras; i++)
     {
-        OS_printf("Camera initialization error.\n");
-        return -1;
+        // TODO: Figure out a better way to initialize TTY interfaces than just by index - just in case.
+        // Attempt to initalize Camera #1
+        if (init(&cam, i) == -1) // Error
+        {
+            OS_printf("Camera initialization error.\n");
+            return -1;
+        }
     }
 
-    /*
-    ** Initialize the Parallel Pins
-    */
-    setupParallelPhotoCount();
-
-    /*
-    ** infinite Camera loop
-    ** w/ no delay
-    */
     unsigned int num_pics_stored = 1;
-    for (;;)
+    // infinite Camera loop w/ no delay
+    while (true)
     {
-
-        /*
-        ** Get camera version, another way to check that the camera is working properly. Also necessary for initialization.
-        **
-        ** NOTE: Not sure if this should be done every loop iteration. It is a good way to check on the Camera, but maybe wasteful of time.
-        */
-        if ((getVersion(&cam)) == -1)
+        for (i = 0; i < numberOfCameras; i++)
         {
-            OS_printf("Failed communication to Camera.\n"); // NOTE: vc0706_core::checkReply() does CVE logging.
-            // return -1; // should never stop the task, just keep trying.
-            continue; // loop start over
-        }
-
-        /*
-        ** Set Path for the new image
-	    **
-	    ** Format:
-	    ** /ram/images/<num_reboots>_<camera 0 or 1>_<num_pics_stored>.jpg
-        */
-        //OS_printf("VC0706: Calling sprintf()...\n");
-
-        int ret = 0;
-        ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, cam.ttyInterface, num_pics_stored); // cFS /exe relative path
-        if (ret < 0)
-        {
-            OS_printf("sprintf err: %s\n", strerror(ret));
-            continue;
-        }
-
-        ret = snprintf(path, sizeof(path), "/ram/images/%s", file_name); // cFS /exe relative path
-        if (ret < 0)
-        {
-            OS_printf("sprintf err: %s\n", strerror(ret));
-            continue;
-        }
-
-        /*
-        ** Actually take the picture
-        */
-        //OS_printf("VC0706: Calling takePicture(&cam, \"%s\")...\n", path);
-        char *pic_file_name = takePicture(&cam, path);
-        if (pic_file_name != (char *)NULL)
-        {
-            //OS_printf("Debug: Camera took picture. Stored at: %s\n", pic_file_name);
+            /*
+               Get camera version, another way to check that the camera is working properly. Also necessary for initialization.
+              
+               NOTE: Not sure if this should be done every loop iteration. It is a good way to check on the Camera, but maybe wasteful of time.
+            */
+            if ((getVersion(&(cameras[i])) == -1)
+            {
+                // NOTE: vc0706_core::checkReply() (called in getVersion()) does CVE logging.
+                OS_printf("Failed communication to Camera %d.\n", i);
+                // try the other camera
+                continue;
+            }
 
             /*
-		    ** Put Image name on telem packet
-		    */
-            if ((hk_packet_succes = snprintf(VC0706_HkTelemetryPkt.vc0706_filename, 15, "%.*s", 15, (char *)pic_file_name + 12)) < 0) // only use the filename, not path.
+              Set Path for the new image
+            
+              Format:
+              /ram/images/<num_reboots>_<camera 0 or 1>_<num_pics_stored>.jpg
+            */
+
+            int ret = 0;
+            ret = snprintf(file_name, sizeof(file_name), "%.3s_%d_%.4u.jpg", num_reboots, i, num_pics_stored); // cFS /exe relative path
+            if (ret < 0)
             {
-                OS_printf("VC0706: ERROR: HK sprintf ret [%d] filename [%.*s]\n", (int)hk_packet_succes, 15, (char *)&pic_file_name[12]);
-                // continue
+                OS_printf("sprintf err: %s\n", strerror(ret));
+                continue;
+            }
+
+            ret = snprintf(path, sizeof(path), "/ram/images/%s", file_name); // cFS /exe relative path
+            if (ret < 0)
+            {
+                OS_printf("sprintf err: %s\n", strerror(ret));
+                continue;
+            }
+
+            // Actually take the picture
+            char *pic_file_name = takePicture(&(cameras[i]), path);
+            if (pic_file_name != (char *)NULL)
+            {
+                // Put Image name on telem packet
+                if ((hk_packet_success = snprintf(VC0706_HkTelemetryPkt.vc0706_filename, 15, "%.*s", 15, (char *)pic_file_name + 12)) < 0) // only use the filename, not path.
+                {
+                    OS_printf("VC0706: ERROR: HK sprintf ret [%d] filename [%.*s]\n", (int)hk_packet_success, 15, (char *)&pic_file_name[12]);
+                }
+                else
+                {
+                    VC0706_SendTimFileName(file_name);
+                }
+                // increment num pics for filename
+                num_pics_stored++;
             }
             else
             {
-                //OS_printf("VC0706: Wrote Picture Filename to HK Packet. Sent: '%.*s'\n", 15, (char * )&pic_file_name[12], hk_packet_succes);
-                VC0706_SendTimFileName(file_name);
+                VC0706_SendTimFileName("error.txt"); // contains: "image failed to be taken."
             }
-            //OS_printf("VC0706: VC0706_HkTelemetryPkt.vc0706_filename: '%s'\n", VC0706_HkTelemetryPkt.vc0706_filename);
-
-            /*
-			** update number of pics taken on the parallel pins
-			*/
-            updatePhotoCount((uint8)num_pics_stored);
-
-            /*
-		    ** incriment num pics for filename
-		    */
-            num_pics_stored++;
         }
-        else
-        {
-            VC0706_SendTimFileName("error.txt"); // contains: "image failed to be taken."
-        }
-
-    } /* Infinite Camera capture Loop End Here */
-
+    }
     return (0);
-}
-
-/**
- * initializes parallel pins on the parallel line designated for photo count [pins 31-36]
- */
-void setupParallelPhotoCount(void)
-{
-    int i;
-    for (i = 0; i < 6; i++)
-    {
-        pinMode(PARALLEL_PIN_BUS[i], OUTPUT);
-    }
-
-    // initialize to 0
-    updatePhotoCount((uint8)0);
-}
-
-/**
- * Writes the specified int to 6 bits on out parallel line.
- * This function assumes the designated ouputs are already initialized.
- */
-void updatePhotoCount(uint8 pic_count)
-{
-    int gpio_pin;
-    int i;
-    for (i = 0; i < 6; i++)
-    {
-        gpio_pin = PARALLEL_PIN_BUS[i];
-
-        if (pic_count & (1 << i))
-        {
-            digitalWrite(gpio_pin, HIGH);
-        }
-        else
-        {
-            digitalWrite(gpio_pin, LOW);
-        }
-    }
 }
 
 /**

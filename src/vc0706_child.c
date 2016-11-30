@@ -7,6 +7,8 @@
 
 // Command packet from vc0706.c
 extern VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt;
+Camera_t cam_one;
+Camera_t cam_two;
 
 char *taskName = "VC0706 Child Task"; /**< Name under which to register this task */
 
@@ -67,7 +69,8 @@ void VC0706_ChildTask(void)
                           "%s initialization complete", taskName);
 
         // Child task process loop
-        VC0706_takePics();
+        Camera_t cameras[] = {cam_one, cam_two};
+        VC0706_takePics(cameras, 2);
     }
 
     /* This call allows cFE to clean-up system resources */

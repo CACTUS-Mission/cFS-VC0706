@@ -11,8 +11,6 @@ CFE_SB_MsgPtr_t VC0706MsgPtr;              /**< Used to store a pointer to a mes
 uint32 VC0706_ChildTaskID;                 /**< The task ID for VC0706_ChildTask */
 VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt; /**< Struct to store image command for VC0706_SendTimFileName */
 led_t led;                                 /**< Represents the LED flash for the camera */
-Camera_t cam;                              /**< Represents one of the two cameras */
-// TODO: Implement second camera
 
 static CFE_EVS_BinFilter_t VC0706_EventFilters[] =
     {

@@ -18,6 +18,5 @@ extern uint32 VC0706_ChildTaskID;
 int VC0706_ChildInit();
 void VC0706_ChildTask();
 int VC0706_SendTimFileName(char *file_name);
-void setNumReboots(void);
 
 #endif

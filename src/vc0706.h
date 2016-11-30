@@ -5,8 +5,6 @@
 #ifndef _vc0706_h_
 #define _vc0706_h_
 
-#define LED_PIN 16                 // GPIO pin for LEDs
-#define VC0706_MAX_FILENAME_LEN 24 // Maximum expected filename length /ram/images/<reboots [3 char]>_<cam 0 or 1 [1 char]>_<filenum [3 char]>.jpg
 
 // Required header files
 #include "cfe.h"
@@ -38,12 +36,18 @@
 #include "vc0706_led.h"
 #include "vc0706_core.h"
 
+/** The depth for the command pipe (maximum number of commands stored in the buffer) */
 #define VC0706_PIPE_DEPTH 32
-
-// VC0706 Child Task Definitions
+/** Name for the VC0706 CFE child task */
 #define VC0706_CHILD_TASK_NAME "CAMERA_CONTROL"
+/** Number of bytes to allocate for the child task's stack (8KB) */
 #define VC0706_CHILD_TASK_STACK_SIZE 8192
+/** The CFE priority for the child task */
 #define VC0706_CHILD_TASK_PRIORITY 200
+/** GPIO pin for LEDs */
+#define LED_PIN 16
+/** Maximum expected filename length /ram/images/<reboots [3 char]>_<cam 0 or 1 [1 char]>_<filenum [3 char]>.jpg */
+#define VC0706_MAX_FILENAME_LEN 24
 
 void VC0706_AppMain(void);
 void VC0706_AppInit(void);

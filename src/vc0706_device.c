@@ -8,16 +8,13 @@
 // Parallel Pins
 int PARALLEL_PIN_BUS[6] = {36, 35, 34, 33, 32, 31};
 
-// Parallel functions
-void setupParallelPhotoCount(void);
-void updatePhotoCount(uint8 pic_count);
-
 // External References
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
 extern struct led_t led; /**< LED instance from vc0706.c */
 extern struct Camera_t cam;
 
-extern char num_reboots[3];
+/** Holds the number of times the system has rebooted (populated by VC0706_setNumReboots()) */
+char num_reboots[3];
 
 /*
 ** VC0706 take Pictures Loop
@@ -40,8 +37,8 @@ int VC0706_takePics(void)
     /*
     ** get Num reboots
     */
-    //OS_printf("VC0706: Attempting to setNumReboots()...\n");
-    //setNumReboots();
+    //OS_printf("VC0706: Attempting to VC0706_setNumReboots()...\n");
+    //VC0706_setNumReboots();
 
     /*
     ** Attempt to initialize LED
@@ -185,4 +182,37 @@ void updatePhotoCount(uint8 pic_count)
             digitalWrite(gpio_pin, LOW);
         }
     }
+}
+
+/**
+ * Reads the number of reboots since mission start (from /ram/logs/reboot.txt file)
+ */
+void VC0706_setNumReboots()
+{
+    // Reset all of the characters in num_reboots to NULL
+    memset(num_reboots, '0', sizeof(num_reboots));
+
+    // Define file permissions for OS_open - this is required in case the file doesn't exist.
+    //       Owner write | Owner read | Group read | Group write | Others read
+    mode_t mode = S_IWRITE | S_IREAD | S_IRGRP | S_IWGRP | S_IROTH;
+
+    // Open the system's reboot log
+    int32 fd = OS_open((const char *)"/ram/logs/reboot.txt", (int32)OS_READ_ONLY, (uint32)mode);
+
+    // Check for file open success
+    if (fd != OS_FS_SUCCESS)
+        OS_printf("\tCould not open reboot file in VC, ret = %d!\n", fd);
+
+    // Read three characters from file into num_reboots
+    int os_ret = OS_read(fd, (void *)num_reboots, 3);
+    // Make sure the above read completed successfully
+    if (os_ret != OS_FS_SUCCESS)
+    {
+        // If not, set all num_reboots values to 9
+        memset(num_reboots, '9', sizeof(num_reboots));
+        OS_printf("\tCould not read from reboot file in VC, ret = %d!\n", os_ret);
+    }
+
+    // Close the file handle (for /ram/logs/reboot.txt)
+    OS_close(fd);
 }

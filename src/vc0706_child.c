@@ -15,8 +15,12 @@ extern int VC0706_takePics(void);
 char *taskName = "VC0706 Child Task"; /**< Name under which to register this task */
 
 /**
- * Initialization function for the VC0706 child task
- * \returns The completion status returned by the CFE child task creation call
+ * Child Task Initialization function
+ *
+ * This function is invoked during VC0706 application startup initialization to create and initialize the Camera Child Task.
+ * The purpose for the child task is to send commands to the camera, and to recieve then store images taken.
+ * \returns The success value of the child task creation function call
+ * \sa #VC0706_AppInit
  */
 int VC0706_ChildInit()
 {
@@ -45,7 +49,10 @@ int VC0706_ChildInit()
 }
 
 /**
- * The main function called by CFE after its registry as an Executive Services child task.
+ * The entry point for the VC0706 application child task.
+ * Registers with CFE as a child task, interfaces with the parent task and calls the child task main loop function.
+ * Should the main loop function return due to a breakdown in the interface handshake with the parent task,
+ * this function will self delete as a child task with CFE.
  */
 void VC0706_ChildTask()
 {

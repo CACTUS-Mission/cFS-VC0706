@@ -36,23 +36,12 @@ int VC0706_takePics(Camera_t cameras[], int numberOfCameras)
     // Attempt to initialize LED
     led_init(&led, (int)LED_PIN);
 
-    // TODO: probably change this to something like currentCamera for readability
-    int i;
-    for (i = 0; i < numberOfCameras; i++)
-    {
-        // TODO: Figure out a better way to initialize TTY interfaces than just by index - just in case.
-        // Attempt to initalize Camera #1
-        if (init(&(cameras[i]), i) == -1) // Error
-        {
-            OS_printf("Camera initialization error.\n");
-            return -1;
-        }
-    }
-
     unsigned int num_pics_stored = 1;
     // infinite Camera loop w/ no delay
     while (true)
     {
+        // TODO: probably change this to something like currentCamera for readability
+        int i;
         for (i = 0; i < numberOfCameras; i++)
         {
             /*

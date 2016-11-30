@@ -81,7 +81,7 @@ void VC0706_ChildTask(void)
         }
     }
 
-    /* This call allows cFE to clean-up system resources */
+    // This call allows cFE to clean-up system resources
     CFE_ES_ExitChildTask();
 }
 

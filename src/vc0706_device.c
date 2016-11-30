@@ -3,15 +3,17 @@
  * \brief Contains additional VC0706 communication logic (see vc0706_core.c)
  */
 #include "vc0706.h"
+// TODO: untangle these headers so that this file doesn't need the child task header
 #include "vc0706_child.h"
 #include "vc0706_device.h"
 
 /** Parallel Pins */
 int PARALLEL_PIN_BUS[6] = {36, 35, 34, 33, 32, 31};
+/** Represents the LED flash for the camera */
+led_t led;
 
 // External References
 extern vc0706_hk_tlm_t VC0706_HkTelemetryPkt;
-extern struct led_t led; /**< LED instance from vc0706.c */
 
 /** Holds the number of times the system has rebooted (populated by VC0706_setNumReboots()) */
 char num_reboots[3];

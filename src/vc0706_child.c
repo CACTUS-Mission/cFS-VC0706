@@ -1,23 +1,27 @@
+/**
+ * \file vc0706_child.c
+ * \brief The child task spawned by the VC0706 app to take pictures
+ */
 #include "vc0706_child.h"
-
-char num_reboots[3];
+#include "vc0706_device.h"
 
 // Command packet from vc0706.c
 extern VC0706_IMAGE_CMD_PKT_t VC0706_ImageCmdPkt;
 
-// From vc0706_device.c
-extern int VC0706_takePics(void);
-
 char *taskName = "VC0706 Child Task"; /**< Name under which to register this task */
 
 /**
- * Initialization function for the VC0706 child task
- * \returns The completion status returned by the CFE child task creation call
+ * Child Task Initialization function
+ *
+ * This function is invoked during VC0706 application startup initialization to create and initialize the Camera Child Task.
+ * The purpose for the child task is to send commands to the camera, and to recieve then store images taken.
+ * \returns The success value of the child task creation function call
+ * \sa #VC0706_AppInit
  */
-int VC0706_ChildInit()
+int VC0706_ChildInit(void)
 {
     // Read number of reboots
-    setNumReboots();
+    VC0706_setNumReboots();
 
     // Create child task - VC0706 monitor task
     int32 result = CFE_ES_CreateChildTask(&VC0706_ChildTaskID,
@@ -29,21 +33,24 @@ int VC0706_ChildInit()
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: create task failed: result = %d",
-                          taskName, result);
+                          taskName, (int)result);
     }
     else
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_EID, CFE_EVS_INFORMATION,
                           "%s initialization info: create task complete: result = %d",
-                          taskName, result);
+                          taskName, (int)result);
     }
     return result;
 }
 
 /**
- * The main function called by CFE after its registry as an Executive Services child task.
+ * The entry point for the VC0706 application child task.
+ * Registers with CFE as a child task, interfaces with the parent task and calls the child task main loop function.
+ * Should the main loop function return due to a breakdown in the interface handshake with the parent task,
+ * this function will self delete as a child task with CFE.
  */
-void VC0706_ChildTask()
+void VC0706_ChildTask(void)
 {
     // The child task runs until the parent dies (normal end) or until it encounters a fatal error (semaphore error, etc.)...
     int32 result = CFE_ES_RegisterChildTask();
@@ -52,7 +59,7 @@ void VC0706_ChildTask()
     {
         CFE_EVS_SendEvent(VC0706_CHILD_INIT_ERR_EID, CFE_EVS_ERROR,
                           "%s initialization error: register child failed: result = %d",
-                          taskName, result);
+                          taskName, (int)result);
     }
     else
     {
@@ -95,7 +102,7 @@ int VC0706_SendTimFileName(char *file_name)
 
     if (ret < 0)
     {
-        OS_printf("VC0706: SendTimFileName() Set Cmd Code Ret [%d].\n", ret);
+        OS_printf("VC0706: SendTimFileName() Set Cmd Code Ret [%d].\n", (int)ret);
     }
 
     snprintf(VC0706_ImageCmdPkt.ImageName, sizeof(VC0706_ImageCmdPkt.ImageName), "%s", file_name);
@@ -107,37 +114,4 @@ int VC0706_SendTimFileName(char *file_name)
     CFE_EVS_SendEvent(VC0706_CHILD_INIT_INF_EID, CFE_EVS_INFORMATION, "Message sent to TIM from VC0706.");
 
     return 0;
-}
-
-/**
- * Reads the number of reboots since mission start (from /ram/logs/reboot.txt file)
- */
-void setNumReboots()
-{
-    // Reset all of the characters in num_reboots to NULL
-    memset(num_reboots, '0', sizeof(num_reboots));
-
-    // Define file permissions for OS_open - this is required in case the file doesn't exist.
-    //       Owner write | Owner read | Group read | Group write | Others read
-    mode_t mode = S_IWRITE | S_IREAD | S_IRGRP | S_IWGRP | S_IROTH;
-
-    // Open the system's reboot log
-    int32 fd = OS_open((const char *)"/ram/logs/reboot.txt", (int32)OS_READ_ONLY, (uint32)mode);
-
-    // Check for file open success
-    if (fd != OS_FS_SUCCESS)
-        OS_printf("\tCould not open reboot file in VC, ret = %d!\n", fd);
-
-    // Read three characters from file into num_reboots
-    int os_ret = OS_read(fd, (void *)num_reboots, 3);
-    // Make sure the above read completed successfully
-    if (os_ret != OS_FS_SUCCESS)
-    {
-        // If not, set all num_reboots values to 9
-        memset(num_reboots, '9', sizeof(num_reboots));
-        OS_printf("\tCould not read from reboot file in VC, ret = %d!\n", os_ret);
-    }
-
-    // Close the file handle (for /ram/logs/reboot.txt)
-    OS_close(fd);
 }

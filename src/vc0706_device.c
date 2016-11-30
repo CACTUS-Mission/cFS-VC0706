@@ -6,7 +6,7 @@
 #include "vc0706_child.h"
 #include "vc0706_device.h"
 
-// Parallel Pins
+/** Parallel Pins */
 int PARALLEL_PIN_BUS[6] = {36, 35, 34, 33, 32, 31};
 
 // External References
@@ -17,9 +17,9 @@ extern struct Camera_t cam;
 /** Holds the number of times the system has rebooted (populated by VC0706_setNumReboots()) */
 char num_reboots[3];
 
-/*
-** VC0706 take Pictures Loop
-*/
+/**
+ * Core loop for taking pictures
+ */
 int VC0706_takePics(void)
 {
     int32 hk_packet_succes = 0;
@@ -147,9 +147,9 @@ int VC0706_takePics(void)
     return (0);
 }
 
-/*
-** initializes parallel pins on the parallel line designated for photo count [pins 31-36]
-*/
+/**
+ * initializes parallel pins on the parallel line designated for photo count [pins 31-36]
+ */
 void setupParallelPhotoCount(void)
 {
     int i;
@@ -162,10 +162,10 @@ void setupParallelPhotoCount(void)
     updatePhotoCount((uint8)0);
 }
 
-/*
-** updatePhotoCount() - writes the specified int to 6 bits on out parallel line
-** 						this function assumes the designated ouputs are already 
-*/
+/**
+ * Writes the specified int to 6 bits on out parallel line.
+ * This function assumes the designated ouputs are already initialized.
+ */
 void updatePhotoCount(uint8 pic_count)
 {
     int gpio_pin;
